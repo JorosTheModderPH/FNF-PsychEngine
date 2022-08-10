@@ -4612,12 +4612,13 @@ class PlayState extends MusicBeatState
 
 		if (!note.wasGoodHit)
 		{
+
+		    if(cpuControlled && (note.ignoreNote || note.hitCausesMiss)) return;
+
 			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled)
 			{
 				FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
 			}
-
-			if(cpuControlled && (note.ignoreNote || note.hitCausesMiss)) return;
 
 			if(note.hitCausesMiss) {
 				noteMiss(note);
