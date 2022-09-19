@@ -176,6 +176,7 @@ class PlayState extends MusicBeatState
 
 	public var gfSpeed:Int = 1;
 	public var health:Float = 1;
+	public var healthDmg:Float = 0.0;
 	public var combo:Int = 0;
 
 	private var healthBarBG:AttachedSprite;
@@ -353,18 +354,21 @@ class PlayState extends MusicBeatState
 		var rating:Rating = new Rating('good');
 		rating.ratingMod = 0.7;
 		rating.score = 200;
+		rating.healthDmg = 0.01;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
 
 		var rating:Rating = new Rating('bad');
 		rating.ratingMod = 0.4;
 		rating.score = 100;
+		rating.healthDmg = 0.035;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
 
 		var rating:Rating = new Rating('shit');
 		rating.ratingMod = 0;
 		rating.score = 50;
+		rating.healthDmg = 0.0405;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
 
@@ -404,6 +408,10 @@ class PlayState extends MusicBeatState
 
 		if (SONG == null)
 			SONG = Song.loadFromJson('tutorial');
+
+		remove(dad);
+		remove(boyfriend);
+		remove(gf);
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -1366,6 +1374,8 @@ class PlayState extends MusicBeatState
 
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000;
 		callOnLuas('onCreatePost', []);
+
+
 
 		super.create();
 
@@ -2570,6 +2580,10 @@ class PlayState extends MusicBeatState
 
 				var newCharacter:String = event.value2;
 				addCharacterToList(newCharacter, charType);
+
+				remove(dad);
+				remove(boyfriend);
+				remove(gf);
 
 			case 'Dadbattle Spotlight':
 				dadbattleBlack = new BGSprite(null, -800, -400, 0, 0);
@@ -4087,6 +4101,7 @@ class PlayState extends MusicBeatState
 		if(!note.ratingDisabled) daRating.increase();
 		note.rating = daRating.name;
 		score = daRating.score;
+		healthDmg += daRating.healthDmg;
 
 		if(daRating.noteSplash && !note.noteSplashDisabled)
 		{
@@ -4602,112 +4617,115 @@ class PlayState extends MusicBeatState
 	}
 
 	function goodNoteHit(note:Note):Void
-	{
-		if (!note.wasGoodHit)
 		{
-			if(cpuControlled && (note.ignoreNote || note.hitCausesMiss)) return;
-
-			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled)
+			if (!note.wasGoodHit)
 			{
-				FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
-			}
-
-			if(note.hitCausesMiss) {
-				noteMiss(note);
-				if(!note.noteSplashDisabled && !note.isSustainNote) {
-					spawnNoteSplashOnNote(note);
-				}
-
-				if(!note.noMissAnimation)
+				if(cpuControlled && (note.ignoreNote || note.hitCausesMiss)) return;
+	
+				if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled)
 				{
-					switch(note.noteType) {
-						case 'Hurt Note': //Hurt note
-							if(boyfriend.animation.getByName('hurt') != null) {
-								boyfriend.playAnim('hurt', true);
-								boyfriend.specialAnim = true;
-							}
+					FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+				}
+	
+				if(note.hitCausesMiss) {
+					noteMiss(note);
+					if(!note.noteSplashDisabled && !note.isSustainNote) {
+						spawnNoteSplashOnNote(note);
+					}
+	
+					if(!note.noMissAnimation)
+					{
+						switch(note.noteType) {
+							case 'Hurt Note': //Hurt note
+								if(boyfriend.animation.getByName('hurt') != null) {
+									boyfriend.playAnim('hurt', true);
+									boyfriend.specialAnim = true;
+								}
+						}
+					}
+	
+					note.wasGoodHit = true;
+					if (!note.isSustainNote)
+					{
+						note.kill();
+						notes.remove(note, true);
+						note.destroy();
+					}
+					return;
+				}
+	
+				if (!note.isSustainNote)
+				{
+					combo += 1;
+					if(combo > 9999) combo = 9999;
+					popUpScore(note);
+					health += note.hitHealth * healthGain;
+					health -= healthDmg * healthLoss;
+					healthDmg = 0;
+				}
+				
+	
+				if(!note.noAnimation) {
+					var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
+	
+					if(note.gfNote)
+					{
+						if(gf != null)
+						{
+							gf.playAnim(animToPlay + note.animSuffix, true);
+							gf.holdTimer = 0;
+						}
+					}
+					else
+					{
+						boyfriend.playAnim(animToPlay + note.animSuffix, true);
+						boyfriend.holdTimer = 0;
+					}
+	
+					if(note.noteType == 'Hey!') {
+						if(boyfriend.animOffsets.exists('hey')) {
+							boyfriend.playAnim('hey', true);
+							boyfriend.specialAnim = true;
+							boyfriend.heyTimer = 0.6;
+						}
+	
+						if(gf != null && gf.animOffsets.exists('cheer')) {
+							gf.playAnim('cheer', true);
+							gf.specialAnim = true;
+							gf.heyTimer = 0.6;
+						}
 					}
 				}
-
+	
+				if(cpuControlled) {
+					var time:Float = 0.15;
+					if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) {
+						time += 0.15;
+					}
+					StrumPlayAnim(false, Std.int(Math.abs(note.noteData)), time);
+				} else {
+					var spr = playerStrums.members[note.noteData];
+					if(spr != null)
+					{
+						spr.playAnim('confirm', true);
+					}
+				}
 				note.wasGoodHit = true;
+				vocals.volume = 1;
+	
+				var isSus:Bool = note.isSustainNote; //GET OUT OF MY HEAD, GET OUT OF MY HEAD, GET OUT OF MY HEAD
+				var leData:Int = Math.round(Math.abs(note.noteData));
+				var leType:String = note.noteType;
+				callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
+	
 				if (!note.isSustainNote)
 				{
 					note.kill();
 					notes.remove(note, true);
 					note.destroy();
 				}
-				return;
-			}
-
-			if (!note.isSustainNote)
-			{
-				combo += 1;
-				if(combo > 9999) combo = 9999;
-				popUpScore(note);
-			}
-			health += note.hitHealth * healthGain;
-
-			if(!note.noAnimation) {
-				var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
-
-				if(note.gfNote)
-				{
-					if(gf != null)
-					{
-						gf.playAnim(animToPlay + note.animSuffix, true);
-						gf.holdTimer = 0;
-					}
-				}
-				else
-				{
-					boyfriend.playAnim(animToPlay + note.animSuffix, true);
-					boyfriend.holdTimer = 0;
-				}
-
-				if(note.noteType == 'Hey!') {
-					if(boyfriend.animOffsets.exists('hey')) {
-						boyfriend.playAnim('hey', true);
-						boyfriend.specialAnim = true;
-						boyfriend.heyTimer = 0.6;
-					}
-
-					if(gf != null && gf.animOffsets.exists('cheer')) {
-						gf.playAnim('cheer', true);
-						gf.specialAnim = true;
-						gf.heyTimer = 0.6;
-					}
-				}
-			}
-
-			if(cpuControlled) {
-				var time:Float = 0.15;
-				if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) {
-					time += 0.15;
-				}
-				StrumPlayAnim(false, Std.int(Math.abs(note.noteData)), time);
-			} else {
-				var spr = playerStrums.members[note.noteData];
-				if(spr != null)
-				{
-					spr.playAnim('confirm', true);
-				}
-			}
-			note.wasGoodHit = true;
-			vocals.volume = 1;
-
-			var isSus:Bool = note.isSustainNote; //GET OUT OF MY HEAD, GET OUT OF MY HEAD, GET OUT OF MY HEAD
-			var leData:Int = Math.round(Math.abs(note.noteData));
-			var leType:String = note.noteType;
-			callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
-
-			if (!note.isSustainNote)
-			{
-				note.kill();
-				notes.remove(note, true);
-				note.destroy();
 			}
 		}
-	}
 
 	public function spawnNoteSplashOnNote(note:Note) {
 		if(ClientPrefs.noteSplashes && note != null) {
