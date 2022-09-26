@@ -92,6 +92,7 @@ class Note extends FlxSprite
 	public var noMissAnimation:Bool = false;
 	public var hitCausesMiss:Bool = false;
 	public var distance:Float = 2000; //plan on doing scroll directions soon -bb
+	public var noteStyle:String = ''; 
 
 	public var hitsoundDisabled:Bool = false;
 
@@ -161,13 +162,14 @@ class Note extends FlxSprite
 		return value;
 	}
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false)
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false, ?noteStyle:String = '')
 	{
 		super();
 
 		if (prevNote == null)
 			prevNote = this;
 
+		this.noteStyle = noteStyle;
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 		this.inEditor = inEditor;
@@ -214,7 +216,7 @@ class Note extends FlxSprite
 
 			offsetX -= width / 2;
 
-			if (PlayState.isPixelStage)
+			if (noteStyle == 'pixel')
 				offsetX += 30;
 
 			if (prevNote.isSustainNote)
@@ -227,15 +229,16 @@ class Note extends FlxSprite
 					prevNote.scale.y *= PlayState.instance.songSpeed;
 				}
 
-				if(PlayState.isPixelStage) {
+				if (noteStyle == 'pixel')
+				{
 					prevNote.scale.y *= 1.19;
-					prevNote.scale.y *= (6 / height); //Auto adjust note size
 				}
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
 
-			if(PlayState.isPixelStage) {
+			if (noteStyle == 'pixel')
+			{
 				scale.y *= PlayState.daPixelZoom;
 				updateHitbox();
 			}
@@ -254,9 +257,11 @@ class Note extends FlxSprite
 		if(suffix == null) suffix = '';
 
 		var skin:String = texture;
+		
 		if(texture.length < 1) {
 			skin = PlayState.SONG.arrowSkin;
-			if(skin == null || skin.length < 1) {
+			if(skin == null || skin.length < 1) 
+			{
 				skin = 'NOTE_assets';
 			}
 		}
@@ -271,40 +276,45 @@ class Note extends FlxSprite
 
 		var lastScaleY:Float = scale.y;
 		var blahblah:String = arraySkin.join('/');
-		if(PlayState.isPixelStage) {
-			if(isSustainNote) {
-				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'));
-				width = width / 4;
-				height = height / 2;
-				originalHeightForCalcs = height;
-				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'), true, Math.floor(width), Math.floor(height));
-			} else {
-				loadGraphic(Paths.image('pixelUI/' + blahblah));
-				width = width / 4;
-				height = height / 5;
-				loadGraphic(Paths.image('pixelUI/' + blahblah), true, Math.floor(width), Math.floor(height));
-			}
-			setGraphicSize(Std.int(width * PlayState.daPixelZoom));
-			loadPixelNoteAnims();
-			antialiasing = false;
-
-			if(isSustainNote) {
-				offsetX += lastNoteOffsetXForPixelAutoAdjusting;
-				lastNoteOffsetXForPixelAutoAdjusting = (width - 7) * (PlayState.daPixelZoom / 2);
-				offsetX -= lastNoteOffsetXForPixelAutoAdjusting;
-
-				/*if(animName != null && !animName.endsWith('end'))
+		switch (noteStyle)
+		{
+			case 'pixel':
+				if (isSustainNote)
 				{
-					lastScaleY /= lastNoteScaleToo;
-					lastNoteScaleToo = (6 / height);
-					lastScaleY *= lastNoteScaleToo;
-				}*/
-			}
-		} else {
-			frames = Paths.getSparrowAtlas(blahblah);
-			loadNoteAnims();
-			antialiasing = ClientPrefs.globalAntialiasing;
+					loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'));
+					width = width / 4;
+					height = height / 2;
+					loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'), true, Math.floor(width), Math.floor(height));
+				}
+				else
+				{
+					loadGraphic(Paths.image('pixelUI/' + blahblah));
+					width = width / 4;
+					height = height / 5;
+					loadGraphic(Paths.image('pixelUI/' + blahblah), true, Math.floor(width), Math.floor(height));
+				}
+				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
+				loadPixelNoteAnims();
+				antialiasing = false;
+			case 'dorkly': // This code is for testing purposes only, not for the mods.
+				frames = Paths.getSparrowAtlas('dorklyUI/' + blahblah);
+				loadNoteAnims();
+				antialiasing = ClientPrefs.globalAntialiasing;
+			default:
+			    frames = Paths.getSparrowAtlas(blahblah);
+				loadNoteAnims();
+				antialiasing = ClientPrefs.globalAntialiasing;
 		}
+
+        /*if(PlayState.SONG.song == 'Washed-Up-V2')
+		{
+			frames = Paths.getSparrowAtlas('NOTE_assets_dork');
+		}
+		else
+		{
+			frames = Paths.getSparrowAtlas(blahblah);
+		}*/
+
 		if(isSustainNote) {
 			scale.y = lastScaleY;
 		}
@@ -331,6 +341,7 @@ class Note extends FlxSprite
 
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
+
 	}
 
 	function loadPixelNoteAnims() {

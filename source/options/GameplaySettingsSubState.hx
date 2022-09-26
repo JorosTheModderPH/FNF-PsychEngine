@@ -145,6 +145,20 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.changeValue = 0.1;
 		addOption(option);
 
+		var option:Option = new Option('Lane Underlay',
+			"If unchecked, then no underlane.",
+			'laneUnderlay',
+			'bool',
+			true);
+		addOption(option);
+
+		var option:Option = new Option('Darken Screen',
+			"If checked, Darken your screen outside in the background.",
+			'darkenScreen',
+			'bool',
+			true);
+		addOption(option);
+
 		super();
 	}
 

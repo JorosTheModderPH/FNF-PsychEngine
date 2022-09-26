@@ -27,6 +27,8 @@ class ClientPrefs {
 	public static var timeBarType:String = 'Time Left';
 	public static var scoreZoom:Bool = true;
 	public static var noReset:Bool = false;
+	public static var laneUnderlay:Bool = true;
+	public static var darkenScreen:Bool = true;
 	public static var healthBarAlpha:Float = 1;
 	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
@@ -210,6 +212,12 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.noReset != null) {
 			noReset = FlxG.save.data.noReset;
+		}
+		if(FlxG.save.data.laneUnderlay != null) {
+			laneUnderlay = FlxG.save.data.laneUnderlay;
+		}
+		if(FlxG.save.data.darkenScreen != null) {
+			darkenScreen = FlxG.save.data.darkenScreen;
 		}
 		if(FlxG.save.data.healthBarAlpha != null) {
 			healthBarAlpha = FlxG.save.data.healthBarAlpha;
