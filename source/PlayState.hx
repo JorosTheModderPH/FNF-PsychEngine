@@ -3622,9 +3622,6 @@ class PlayState extends MusicBeatState
 						}
 				}
 
-			case 'BG Freaks Expression':
-				if(bgGirls != null) bgGirls.swapDanceType();
-
 			case 'Change Scroll Speed':
 				if (songSpeedType == "constant")
 					return;
