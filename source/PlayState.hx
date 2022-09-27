@@ -893,13 +893,6 @@ class PlayState extends MusicBeatState
 				gf.visible = false;
 		}
 
-		switch(curStage)
-		{
-			case 'schoolEvil':
-				var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069); //nice
-				addBehindDad(evilTrail);
-		}
-
 		var file:String = Paths.json(songName + '/dialogue'); //Checks for json/Psych Engine dialogue
 		if (OpenFlAssets.exists(file)) {
 			dialogueJson = DialogueBoxPsych.parseDialogue(file);
@@ -924,13 +917,13 @@ class PlayState extends MusicBeatState
 		strumLine.scrollFactor.set();
 
 		laneunderlaywhiteleftsideOpponent = new FlxSprite(70, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiteleftsideOpponent.alpha = 0.75;
+		laneunderlaywhiteleftsideOpponent.alpha = 0.95;
 		laneunderlaywhiteleftsideOpponent.scrollFactor.set();
 		laneunderlaywhiteleftsideOpponent.screenCenter(Y);
 		laneunderlaywhiteleftsideOpponent.visible = false;
 
 		laneunderlaywhiterightsideOpponent = new FlxSprite(570, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiterightsideOpponent.alpha = 0.75;
+		laneunderlaywhiterightsideOpponent.alpha = 0.95;
 		laneunderlaywhiterightsideOpponent.scrollFactor.set();
 		laneunderlaywhiterightsideOpponent.screenCenter(Y);
 		laneunderlaywhiterightsideOpponent.visible = false;
@@ -942,19 +935,19 @@ class PlayState extends MusicBeatState
 		laneunderlayOpponent.visible = false;
 
 		laneunderlaywhiteleftside = new FlxSprite(700, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiteleftside.alpha = 0.9;
+		laneunderlaywhiteleftside.alpha = 0.95;
 		laneunderlaywhiteleftside.scrollFactor.set();
 		laneunderlaywhiteleftside.cameras = [camHUD];
 		laneunderlaywhiteleftside.visible = false;
 
 		laneunderlaywhiterightside = new FlxSprite(1200, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiterightside.alpha = 0.9;
+		laneunderlaywhiterightside.alpha = 0.95;
 		laneunderlaywhiterightside.scrollFactor.set();
 		laneunderlaywhiterightside.cameras = [camHUD];
 		laneunderlaywhiterightside.visible = false;
 
 		laneunderlaywhiteleftsidemiddlescroll = new FlxSprite(380, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiteleftsidemiddlescroll.alpha = 0.9;
+		laneunderlaywhiteleftsidemiddlescroll.alpha = 0.95;
 		laneunderlaywhiteleftsidemiddlescroll.scrollFactor.set();
 		laneunderlaywhiteleftsidemiddlescroll.screenCenter(X);
 		laneunderlaywhiteleftsidemiddlescroll.x = 380;
@@ -962,7 +955,7 @@ class PlayState extends MusicBeatState
 		laneunderlaywhiteleftside.visible = false;
 
 		laneunderlaywhiterightsidemiddlescroll = new FlxSprite(890, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiterightsidemiddlescroll.alpha = 0.9;
+		laneunderlaywhiterightsidemiddlescroll.alpha = 0.95;
 		laneunderlaywhiterightsidemiddlescroll.screenCenter(X);
 		laneunderlaywhiterightsidemiddlescroll.x = 890;
 		laneunderlaywhiterightsidemiddlescroll.cameras = [camHUD];
