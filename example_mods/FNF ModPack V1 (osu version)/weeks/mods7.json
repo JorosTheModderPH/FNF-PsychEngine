@@ -1,0 +1,132 @@
+
+{
+	"storyName": "mods7",
+	"difficulties": "Standard,Opponent,Compact",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"hideStoryMode": true,
+	"songs": [
+		[
+			"     VS Soft",
+			"none",
+			[
+				44,
+				44,
+				44
+			]
+		],
+		[
+			"No-Cigar",
+			"softdad",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Repressed",
+			"softmonster",
+			[
+				255,
+				175,
+				0
+			]
+		],
+		[
+			"Playdate",
+			"softgf",
+			[
+				255,
+				175,
+				0
+			]
+		],
+		[
+			"Stay",
+			"softgf",
+			[
+				175,
+				75,
+				135
+			]
+		],
+		[
+			"Its-Complicated",
+			"softgf",
+			[
+				75,
+				46,
+				115
+			]
+		],
+		[
+			"Spotlight",
+			"softmom",
+			[
+				75,
+				46,
+				115
+			]
+		],
+		[
+			"Hope",
+			"softparents",
+			[
+				15,
+				200,
+				80
+			]
+		],
+		[
+			"Genesis",
+			"softmonster",
+			[
+				40,
+				100,
+				80
+			]
+		],
+		[
+			"Diplopia",
+			"bf",
+			[
+				40,
+				100,
+				80
+			]
+		],
+		[
+			"In-Fighting",
+			"bf",
+			[
+				40,
+				100,
+				80
+			]
+		],
+		[
+			"Envy",
+			"bf",
+			[
+				155,
+				195,
+				40
+			]
+		]
+	],
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"hiddenUntilUnlocked": false,
+	"weekName": "mods6"
+}

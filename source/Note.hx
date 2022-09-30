@@ -276,7 +276,7 @@ class Note extends FlxSprite
 
 		var lastScaleY:Float = scale.y;
 		var blahblah:String = arraySkin.join('/');
-		switch (noteStyle)
+		switch (noteStyle) //notestyle stuff by Doki-Doki Devs
 		{
 			case 'pixel':
 				if (isSustainNote)

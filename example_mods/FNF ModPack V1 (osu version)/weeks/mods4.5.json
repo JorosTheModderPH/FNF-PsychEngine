@@ -1,0 +1,104 @@
+{
+	"songs": [
+	    [
+			"      Vs Bob And Bosip",
+			"none",
+			[
+				44,
+				44,
+				44
+			]
+		],
+		[
+			"Jump In",
+			"bob",
+			[
+				243,
+				228,
+				28
+			]
+		],
+		[
+			"Swing",
+			"bosip",
+			[
+				243,
+				228,
+				28
+			]
+		],
+		[
+			"Conscience",
+			"minishoey",
+			[
+				55,
+				223,
+				153
+			]
+		],
+		[
+			"Yap-Squad",
+			"jghost",
+			[
+				210,
+				69,
+				69
+			]
+		],
+		[
+			"Intertwined",
+			"ashncerb",
+			[
+				72,
+				72,
+				72
+			]
+	    ],
+	     [
+			"Copy Cat",
+			"bo",
+			[
+				255,
+				255,
+				255
+			]
+	    ],
+        [ 
+			"Jump Out",
+			"bo",
+			[
+				255,
+				255,
+				255
+			]
+	    ],
+        [ 
+			"Ronald Mcdonald Slide",
+			"ronsip",
+			[
+				243,
+				228,
+				28
+			]
+		 ] 
+     ],
+	"hiddenUntilUnlocked": false,
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"difficulties": "Standard,Opponent,Compact",
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"storyName": "Your New Week",
+	"weekName": "Custom Week",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"hideStoryMode": false,
+	"weekBefore": "tutorial",
+	"startUnlocked": true
+}

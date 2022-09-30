@@ -1,0 +1,137 @@
+{
+	"dialogue": [
+		{
+			"speed": 0.05,
+			"portrait": "gf-gone",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Geez, That was intense..."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "gf-gone",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Yeah, that guy's face was totally, uh,\\n'ballistic'..."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "gf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "You know, I really had fun during all of those weeks I spent with you."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "shocked",
+			"text": "Well, here's hopin' this one doesn't have any rap battle challengers or crazy monsters..."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "shocked",
+			"text": "I'm tired..."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "gf-gone",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Hello!"
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Huh?"
+		},
+		{
+			"speed": 0.05,
+			"portrait": "hex",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Are you perhaps up for a game or two?"
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Uhh, sorry, dude. I'm not too good at\\nbasketball... Too short to dunk..."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "hex",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Oh! My apologies! Perhaps a game on the microphone instead?"
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "You mean you wanna sing..? I guess that'd be fine... Wait a minute...."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "shocked",
+			"text": "Were you sent here by Daddy Dearest?"
+		},
+		{
+			"speed": 0.05,
+			"portrait": "hex",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Huh? Who..?"
+		},
+		{
+			"speed": 0.05,
+			"portrait": "hex",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "A user under the name 'Daddy Dearest'\\nwas not recognized on my hard drive..."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Oh, uh, I guess it's cool then."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "pissed",
+			"text": "You ready, then, uhh..."
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "What'd you say your name was?"
+		},
+		{
+			"speed": 0.05,
+			"portrait": "hex",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Hex! I'm always ready!"
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "pissed",
+			"text": "Alright, Hex! Let's funk!"
+		}
+	]
+}

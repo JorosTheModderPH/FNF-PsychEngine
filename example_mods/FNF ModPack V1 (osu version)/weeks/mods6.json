@@ -1,0 +1,140 @@
+{
+	"storyName": "mods6",
+	"difficulties": "Standard,Opponent,Compact",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"hideStoryMode": true,
+	"songs": [
+		[
+			"     VS Arrow Funk",
+			"none",
+			[
+				44,
+				44,
+				44
+			]
+		],
+		[
+			"Tutorial-Arrow-Funk",
+			"kevin",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Reboop",
+			"sagu",
+			[
+				255,
+				175,
+				0
+			]
+		],
+		[
+			"Fresher",
+			"sagu",
+			[
+				255,
+				175,
+				0
+			]
+		],
+		[
+			"Rap King",
+			"sagufire",
+			[
+				175,
+				75,
+				135
+			]
+		],
+		[
+			"Bittersweet",
+			"kids",
+			[
+				75,
+				46,
+				115
+			]
+		],
+		[
+			"Nightfall",
+			"kidshappy",
+			[
+				75,
+				46,
+				115
+			]
+		],
+		[
+			"Virus",
+			"virus",
+			[
+				15,
+				200,
+				80
+			]
+		],
+		[
+			"Shacklesz",
+			"dono",
+			[
+				40,
+				100,
+				80
+			]
+		],
+		[
+			"Blam",
+			"dono",
+			[
+				40,
+				100,
+				80
+			]
+		],
+		[
+			"Loaded",
+			"donoangry",
+			[
+				40,
+				100,
+				80
+			]
+		],
+		[
+			"-debug",
+			"bidupixel",
+			[
+				255,
+				95,
+				155
+			]
+		],
+		[
+			"Earthquake",
+			"salsicha",
+			[
+				155,
+				195,
+				40
+			]
+		]
+	],
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"hiddenUntilUnlocked": false,
+	"weekName": "mods6"
+}

@@ -16,8 +16,6 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.addons.display.FlxGridOverlay;
-import flixel.addons.effects.FlxTrail;
-import flixel.addons.effects.FlxTrailArea;
 import flixel.addons.effects.chainable.FlxEffectSprite;
 import flixel.addons.effects.chainable.FlxWaveEffect;
 import flixel.addons.transition.FlxTransitionableState;
@@ -163,7 +161,7 @@ class PlayState extends MusicBeatState
 	public var laneunderlaywhiterightside:FlxSprite;
 	public var laneunderlaywhiteleftsidemiddlescroll:FlxSprite;
 	public var laneunderlaywhiterightsidemiddlescroll:FlxSprite;
-	public var laneunderlay:FlxSprite;
+	public var laneunderlay:FlxSprite; //lane underlay by doki-doki dev
 	public var laneunderlayOpponent:FlxSprite;
 	public var darkenScreen:FlxSprite;
 
@@ -429,10 +427,6 @@ class PlayState extends MusicBeatState
 
 		if (SONG == null)
 			SONG = Song.loadFromJson('tutorial');
-
-		remove(dad);
-		remove(boyfriend);
-		remove(gf);
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -724,13 +718,6 @@ class PlayState extends MusicBeatState
 				ground.updateHitbox();
 				add(ground);
 
-				foregroundSprites = new FlxTypedGroup<BGSprite>();
-				foregroundSprites.add(new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg']));
-				if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank1', -300, 750, 2, 0.2, ['fg']));
-				foregroundSprites.add(new BGSprite('tank2', 450, 940, 1.5, 1.5, ['foreground']));
-				if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg']));
-				foregroundSprites.add(new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']));
-				if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']));
 		}
 
 		switch(Paths.formatToSongPath(SONG.song))
@@ -961,7 +948,7 @@ class PlayState extends MusicBeatState
 		laneunderlaywhiterightsidemiddlescroll.cameras = [camHUD];
 		laneunderlaywhiterightsidemiddlescroll.visible = false;
 
-		laneunderlay = new FlxSprite(70 + (FlxG.width / 2), 0).makeGraphic(500, FlxG.height * 2, FlxColor.BLACK);
+		laneunderlay = new FlxSprite(70 + (FlxG.width / 2), 0).makeGraphic(500, FlxG.height * 2, FlxColor.BLACK); 
 		laneunderlay.alpha = 0.8;
 		laneunderlay.scrollFactor.set();
 		laneunderlay.screenCenter(Y);
@@ -2346,16 +2333,6 @@ class PlayState extends MusicBeatState
 		songLength = FlxG.sound.music.length;
 		FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
-
-		switch(curStage)
-		{
-			case 'tank':
-				if(!ClientPrefs.lowQuality) tankWatchtower.dance();
-				foregroundSprites.forEach(function(spr:BGSprite)
-				{
-					spr.dance();
-				});
-		}
 
 		#if desktop
 		// Updating Discord Rich Presence (with Time Left)
