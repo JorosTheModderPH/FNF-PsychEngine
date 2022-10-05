@@ -3025,13 +3025,6 @@ class PlayState extends MusicBeatState
 
 		if (generatedMusic && !inCutscene)
 		{
-			if (!inCutscene) {
-				if(!cpuControlled) {
-					keyShit();
-				} else if(boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
-					boyfriend.dance();
-					//boyfriend.animation.curAnim.finish();
-				}
 			if(!cpuControlled) {
 				keyShit();
 			} else if(boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * (0.0011 / FlxG.sound.music.pitch) * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
@@ -3082,18 +3075,6 @@ class PlayState extends MusicBeatState
 
 					if(daNote.copyY)
 					{
-<<<<<<< HEAD
-						if (daNote.animation.curAnim.name.endsWith('end')) {
-							daNote.y += 10.5 * (fakeCrochet / 400) * 1.5 * songSpeed + (46 * (songSpeed - 1));
-							daNote.y -= 46 * (1 - (fakeCrochet / 600)) * songSpeed;
-							if (daNote.noteStyle == 'pixel')
-							{
-							  daNote.y += 8;
-							}
-							  else
-							{
-							  daNote.y -= 19;
-=======
 						daNote.y = strumY + Math.sin(angleDir) * daNote.distance;
 
 						//Jesus fuck this took me so much mother fucking time AAAAAAAAAA
@@ -3102,12 +3083,19 @@ class PlayState extends MusicBeatState
 							if (daNote.animation.curAnim.name.endsWith('end')) {
 								daNote.y += 10.5 * (fakeCrochet / 400) * 1.5 * songSpeed + (46 * (songSpeed - 1));
 								daNote.y -= 46 * (1 - (fakeCrochet / 600)) * songSpeed;
-								if(PlayState.isPixelStage) {
+								if (daNote.noteStyle == 'pixel')
+								{
+									  daNote.y += 8 + (6 - daNote.originalHeightForCalcs) * PlayState.daPixelZoom;
+								}
+								else
+								{
+									 daNote.y -= 19;
+								}
+								/*if(PlayState.isPixelStage) {
 									daNote.y += 8 + (6 - daNote.originalHeightForCalcs) * PlayState.daPixelZoom;
 								} else {
 									daNote.y -= 19;
-								}
->>>>>>> fcc55c9bd4eed13d9754f69beb9e931f3086165d
+								}*/
 							}
 							daNote.y += (Note.swagWidth / 2) - (60.5 * (songSpeed - 1));
 							daNote.y += 27.5 * ((SONG.bpm / 100) - 1) * (songSpeed - 1);

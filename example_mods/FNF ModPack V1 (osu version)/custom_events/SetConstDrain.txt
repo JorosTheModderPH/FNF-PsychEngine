@@ -1,7 +1,0 @@
-Value 1 - Set Drain Value (-100/100)
-Recomended value - (0.01/0.1)
-Value 2 - Minimum Drain Value (0/100)
-Recomended value - (0.01/5)
-
-Negative value will make the player gain health
-Value 2 will turn to Maximum Gain instead!

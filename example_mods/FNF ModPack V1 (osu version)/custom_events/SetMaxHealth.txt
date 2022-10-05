@@ -1,4 +1,0 @@
-Value 1 - Max Health to set to (0-100)
-Value 2 - Do the player lose
-health that was past the new Max value?
-(0 - false/1 - true)

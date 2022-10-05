@@ -1,5 +1,0 @@
-Value 1 - Depletion Value (0-100)
-No Value 2
-
-Change how much Temporary Drains deplete over time
-Negative value will return positive and 0 will NOT work
