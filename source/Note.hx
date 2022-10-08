@@ -174,6 +174,19 @@ class Note extends FlxSprite
 		isSustainNote = sustainNote;
 		this.inEditor = inEditor;
 
+		var randomness:Int = FlxG.random.int(0, 3);
+
+		/*if (isSustainNote)
+			{
+				this.noteData = Std.int(Math.abs(randomness - noteData)); // FlipX notes to be hit.
+		        noteData = Std.int(Math.abs(randomness - noteData)); // FlipX noteData sprite (0 = purple, 1 = blue, 2 = green, 3 = red).
+			}
+			else
+			{
+				this.noteData = Std.int(Math.abs(3 + noteData));
+		        noteData = Std.int(Math.abs(3 + noteData));
+			}*/
+
 		x += (ClientPrefs.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;

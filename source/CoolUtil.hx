@@ -22,9 +22,19 @@ class CoolUtil
 		'Normal',
 		'Hard'
 	];
-	public static var defaultDifficulty:String = 'Normal'; //The chart that has no suffix and starting difficulty on Freeplay/Story Mode
+	public static var defaultModes:Array<String> = [
+		'Standard',
+		'Opponent',
+		'Compact',
+		'Randomized'
+	];
+	public static var defaultDifficulty:String = 'Normal';//The chart that has no suffix and starting difficulty on Freeplay/Story Mode
+
+	public static var defaultMode:String = 'Standard';
 
 	public static var difficulties:Array<String> = [];
+
+	public static var modes:Array<String> = [];
 
 	inline public static function quantize(f:Float, snap:Float){
 		// changed so this actually works lol
@@ -52,6 +62,11 @@ class CoolUtil
 	public static function difficultyString():String
 	{
 		return difficulties[PlayState.storyDifficulty].toUpperCase();
+	}
+	
+	public static function modeString():String
+	{
+		return modes[PlayState.storyMode].toUpperCase();
 	}
 
 	inline public static function boundTo(value:Float, min:Float, max:Float):Float {

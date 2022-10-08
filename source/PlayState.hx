@@ -143,6 +143,7 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
+	public static var storyMode:Int = 1;
 
 	public var spawnTime:Float = 2000;
 
@@ -205,6 +206,7 @@ class PlayState extends MusicBeatState
 	private var generatedMusic:Bool = false;
 	public var endingSong:Bool = false;
 	public var startingSong:Bool = false;
+	public static var preloadSong:Bool = false;
 	private var updateTime:Bool = true;
 	public static var changedDifficulty:Bool = false;
 	public static var chartingMode:Bool = false;
@@ -2104,6 +2106,15 @@ class PlayState extends MusicBeatState
 
 			startTimer = new FlxTimer().start(Conductor.crochet / 1000 / playbackRate, function(tmr:FlxTimer)
 			{
+				if (CoolUtil.modeString() == 'COMPACT')
+					{
+						if (!preloadSong)
+							{
+								FlxG.resetState();
+							}
+						preloadSong = true;
+					}
+				
 				if (gf != null && tmr.loopsLeft % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
 				{
 					gf.dance();
@@ -2131,7 +2142,7 @@ class PlayState extends MusicBeatState
 				switch (swagCounter)
 				{
 					case 0:
-						FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
+								FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
 					case 1:
 						countdownReady = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
 						countdownReady.cameras = [camHUD];
@@ -2444,6 +2455,20 @@ class PlayState extends MusicBeatState
 				{
 					gottaHitNote = !section.mustHitSection;
 				}
+				else if (songNotes[1] <= 3 && CoolUtil.modeString() == 'OPPONENT') // Opponent Mode
+				{
+					gottaHitNote = !section.mustHitSection;
+				}
+
+				switch(CoolUtil.modeString())
+				{
+					case 'STANDARD' : // Default Mode
+						daNoteData = Std.int(songNotes[1] % 4);
+					case 'COMPACT' : // Compact Modes
+					    section.mustHitSection = true;
+					case 'RANDOMIZED' : // Randomized Mode
+						daNoteData = FlxG.random.int(0, 3);
+				}
 
 				var oldNote:Note;
 				if (unspawnNotes.length > 0)
@@ -2561,10 +2586,6 @@ class PlayState extends MusicBeatState
 
 				var newCharacter:String = event.value2;
 				addCharacterToList(newCharacter, charType);
-
-				remove(dad);
-				remove(boyfriend);
-				remove(gf);
 
 			case 'Dadbattle Spotlight':
 				dadbattleBlack = new BGSprite(null, -800, -400, 0, 0);
@@ -3677,7 +3698,7 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		if (!SONG.notes[curSection].mustHitSection)
+		if (!SONG.notes[curSection].mustHitSection) 
 		{
 			moveCamera(true);
 			callOnLuas('onMoveCamera', ['dad']);
@@ -3782,6 +3803,7 @@ class PlayState extends MusicBeatState
 
 		deathCounter = 0;
 		seenCutscene = false;
+		preloadSong = false;
 
 		#if ACHIEVEMENTS_ALLOWED
 		if(achievementObj != null) {
