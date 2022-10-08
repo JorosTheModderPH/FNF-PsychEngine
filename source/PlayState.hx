@@ -214,6 +214,7 @@ class PlayState extends MusicBeatState
 	//Gameplay settings
 	public var healthGain:Float = 1;
 	public var healthLoss:Float = 1;
+	public var healthDrain:Float = 0;
 	public var instakillOnMiss:Bool = false;
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
@@ -406,6 +407,7 @@ class PlayState extends MusicBeatState
 		// Gameplay settings
 		healthGain = ClientPrefs.getGameplaySetting('healthgain', 1);
 		healthLoss = ClientPrefs.getGameplaySetting('healthloss', 1);
+		healthDrain = ClientPrefs.getGameplaySetting('healthdrain', 0);
 		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill', false);
 		practiceMode = ClientPrefs.getGameplaySetting('practice', false);
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
@@ -962,6 +964,11 @@ class PlayState extends MusicBeatState
 		darkenScreen.scrollFactor.set();
 		darkenScreen.visible = true;
 
+		if (ClientPrefs.darkenScreen)
+			{
+				add(darkenScreen);
+			}
+
 		if (ClientPrefs.laneUnderlay)
 		{
 			add(laneunderlay);
@@ -978,12 +985,7 @@ class PlayState extends MusicBeatState
 		    add(laneunderlaywhiteleftsideOpponent);
 			add(laneunderlaywhiterightsideOpponent);
 		}
-
-		if (ClientPrefs.darkenScreen)
-		{
-		    add(darkenScreen);
-		}
-
+		
 		var showTime:Bool = (ClientPrefs.timeBarType != 'Disabled');
 		timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, 19, 400, "", 32);
 		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -4524,7 +4526,7 @@ class PlayState extends MusicBeatState
 			note.destroy();
 		}
 
-		if (PlayState.SONG.song == 'Washed-Up-V2') // This code is for testing purposes only, not for the mods.
+		/*if (PlayState.SONG.song == 'Washed-Up-V2') // This code is for testing purposes only, not for the mods.
 			{
 				if (note.isSustainNote)
 					{
@@ -4542,7 +4544,24 @@ class PlayState extends MusicBeatState
 							}
 							//trace('did the drain health works?');
 					}
-			}
+			}*/
+
+			if (note.isSustainNote)
+				{
+					if (health >= 0.2)
+						{
+							health -= 0.0115 * healthDrain;
+						}
+					//trace('did the sustain drain health works?');
+				}
+				else
+				{
+					if (health >= 0.2)
+						{
+							health -= 0.023 * healthDrain;
+						}
+						//trace('did the drain health works?');
+				}
 	}
 
 	function goodNoteHit(note:Note):Void

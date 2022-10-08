@@ -597,8 +597,8 @@ class FreeplayState extends MusicBeatState
 		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
 		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
 		diffText.x -= diffText.width / 2;
-		modeText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
-		modeText.x -= diffText.width / 2;
+		modeText.x = Std.int(scoreBG.x + (scoreBG.width / 1.75));
+		modeText.x -= diffText.width / 1.75;
 	}
 }
 

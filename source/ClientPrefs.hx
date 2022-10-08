@@ -51,6 +51,7 @@ class ClientPrefs {
 		'songspeed' => 1.0,
 		'healthgain' => 1.0,
 		'healthloss' => 1.0,
+		'healthdrain' => 0.0,
 		'instakill' => false,
 		'practice' => false,
 		'botplay' => false,
