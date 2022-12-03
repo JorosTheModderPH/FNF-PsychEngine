@@ -909,13 +909,13 @@ class PlayState extends MusicBeatState
 		strumLine.scrollFactor.set();
 
 		laneunderlaywhiteleftsideOpponent = new FlxSprite(70, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiteleftsideOpponent.alpha = 0.95;
+		laneunderlaywhiteleftsideOpponent.alpha = 0.6;
 		laneunderlaywhiteleftsideOpponent.scrollFactor.set();
 		laneunderlaywhiteleftsideOpponent.screenCenter(Y);
 		laneunderlaywhiteleftsideOpponent.visible = false;
 
 		laneunderlaywhiterightsideOpponent = new FlxSprite(570, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiterightsideOpponent.alpha = 0.95;
+		laneunderlaywhiterightsideOpponent.alpha = 0.6;
 		laneunderlaywhiterightsideOpponent.scrollFactor.set();
 		laneunderlaywhiterightsideOpponent.screenCenter(Y);
 		laneunderlaywhiterightsideOpponent.visible = false;
@@ -927,19 +927,19 @@ class PlayState extends MusicBeatState
 		laneunderlayOpponent.visible = false;
 
 		laneunderlaywhiteleftside = new FlxSprite(700, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiteleftside.alpha = 0.95;
+		laneunderlaywhiteleftside.alpha = 0.6;
 		laneunderlaywhiteleftside.scrollFactor.set();
 		laneunderlaywhiteleftside.cameras = [camHUD];
 		laneunderlaywhiteleftside.visible = false;
 
 		laneunderlaywhiterightside = new FlxSprite(1200, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiterightside.alpha = 0.95;
+		laneunderlaywhiterightside.alpha = 0.6;
 		laneunderlaywhiterightside.scrollFactor.set();
 		laneunderlaywhiterightside.cameras = [camHUD];
 		laneunderlaywhiterightside.visible = false;
 
 		laneunderlaywhiteleftsidemiddlescroll = new FlxSprite(380, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiteleftsidemiddlescroll.alpha = 0.95;
+		laneunderlaywhiteleftsidemiddlescroll.alpha = 0.6;
 		laneunderlaywhiteleftsidemiddlescroll.scrollFactor.set();
 		laneunderlaywhiteleftsidemiddlescroll.screenCenter(X);
 		laneunderlaywhiteleftsidemiddlescroll.x = 380;
@@ -947,7 +947,7 @@ class PlayState extends MusicBeatState
 		laneunderlaywhiteleftside.visible = false;
 
 		laneunderlaywhiterightsidemiddlescroll = new FlxSprite(890, 0).makeGraphic(10, FlxG.height * 2, FlxColor.WHITE);
-		laneunderlaywhiterightsidemiddlescroll.alpha = 0.95;
+		laneunderlaywhiterightsidemiddlescroll.alpha = 0.6;
 		laneunderlaywhiterightsidemiddlescroll.screenCenter(X);
 		laneunderlaywhiterightsidemiddlescroll.x = 890;
 		laneunderlaywhiterightsidemiddlescroll.cameras = [camHUD];
@@ -1105,9 +1105,11 @@ class PlayState extends MusicBeatState
 		iconP2.alpha = ClientPrefs.healthBarAlpha;
 
 
-		scoreTxt = new FlxText(0, healthBarBG.y + 36, FlxG.width, "", 20);
+		scoreTxt = new FlxText(20, 0, 0, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
+		scoreTxt.screenCenter(Y);
+		scoreTxt.y = 220;
 		scoreTxt.borderSize = 1.25;
 		scoreTxt.visible = !ClientPrefs.hideHud;
 		add(scoreTxt);
@@ -2280,9 +2282,10 @@ class PlayState extends MusicBeatState
 	public function updateScore(miss:Bool = false)
 	{
 		scoreTxt.text = 'Score: ' + songScore
-		+ ' | Misses: ' + songMisses
-		+ ' | Rating: ' + ratingName
-		+ (ratingName != '?' ? ' (${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ratingFC' : '');
+		+ '\nHealth: ' + Math.round(health * 50.0)
+		+ '\nMisses: ' + songMisses
+		+ '\nRating: ' + ratingName
+		+ (ratingName != '\n?' ? '\n(${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ranking\n' : '');
 
 		if(ClientPrefs.scoreZoom && !miss && !cpuControlled)
 		{
@@ -2683,10 +2686,10 @@ class PlayState extends MusicBeatState
 		if (isDorklyStage)
 			noteStyle = 'dorkly';
 
-        if (noteStyle == '' || noteStyle == null)
+        if (noteStyle == '' && noteStyle == null)
 		{
 			if (isPixelStage)
-				noteStyle = "pixel";
+				noteStyle = 'pixel';
 			if (isDorklyStage)
 				noteStyle = 'dorkly';
 		}
@@ -4526,6 +4529,8 @@ class PlayState extends MusicBeatState
 			note.destroy();
 		}
 
+		updateScore(true);
+
 		/*if (PlayState.SONG.song == 'Washed-Up-V2') // This code is for testing purposes only, not for the mods.
 			{
 				if (note.isSustainNote)
@@ -4548,7 +4553,7 @@ class PlayState extends MusicBeatState
 
 			if (note.isSustainNote)
 				{
-					if (health >= 0.2)
+					if (health >= 0.23)
 						{
 							health -= 0.0115 * healthDrain;
 						}
@@ -4556,7 +4561,7 @@ class PlayState extends MusicBeatState
 				}
 				else
 				{
-					if (health >= 0.2)
+					if (health >= 0.23)
 						{
 							health -= 0.023 * healthDrain;
 						}
@@ -4894,7 +4899,7 @@ class PlayState extends MusicBeatState
 
 	public var ratingName:String = '?';
 	public var ratingPercent:Float;
-	public var ratingFC:String;
+	public var ranking:String;
 	public function RecalculateRating(badHit:Bool = false) {
 		setOnLuas('score', songScore);
 		setOnLuas('misses', songMisses);
@@ -4929,18 +4934,25 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			// Rating FC
-			ratingFC = "";
-			if (sicks > 0) ratingFC = "SFC";
-			if (goods > 0) ratingFC = "GFC";
-			if (bads > 0 || shits > 0) ratingFC = "FC";
-			if (songMisses > 0 && songMisses < 10) ratingFC = "SDCB";
-			else if (songMisses >= 10) ratingFC = "Clear";
+			// Ranking
+			ranking = "";
+			if (ratingPercent >= 1) ranking = "[S+]";
+			else if (ratingPercent >= 0.95) ranking = "[S]";
+			else if (ratingPercent >= 0.9) ranking = "[AA]";
+			else if (ratingPercent >= 0.85) ranking = "[A]";
+			else if (ratingPercent >= 0.8) ranking = "[B]";
+			else if (ratingPercent >= 0.75) ranking = "[B-]";
+			else if (ratingPercent >= 0.7) ranking = "[C]";
+			else if (ratingPercent >= 0.65) ranking = "[C-]";
+			else if (ratingPercent >= 0.6) ranking = "[D]";
+			else if (ratingPercent >= 0.3) ranking = "[D-]";
+			else if (ratingPercent >= 0.2) ranking = "[F]";
+			else if (ratingPercent >= 0.0) ranking = "[?]";
 		}
 		updateScore(badHit); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce -Ghost
 		setOnLuas('rating', ratingPercent);
 		setOnLuas('ratingName', ratingName);
-		setOnLuas('ratingFC', ratingFC);
+		setOnLuas('ranking', ranking);
 	}
 
 	#if ACHIEVEMENTS_ALLOWED

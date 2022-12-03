@@ -67,8 +67,16 @@ class ChartingState extends MusicBeatState
 		'GF Sing',
 		'No Animation'
 	];
+	public static var noteStyleList:Array<String> =
+	[
+		'',
+		'pixel',
+		'dorkly'
+	];
 	private var noteTypeIntMap:Map<Int, String> = new Map<Int, String>();
 	private var noteTypeMap:Map<String, Null<Int>> = new Map<String, Null<Int>>();
+	private var noteStyleIntMap:Map<Int, String> = new Map<Int, String>();
+	private var noteStyleMap:Map<String, Null<Int>> = new Map<String, Null<Int>>();
 	public var ignoreWarnings = false;
 	var undos = [];
 	var redos = [];
@@ -599,9 +607,6 @@ class ChartingState extends MusicBeatState
 			updateGrid();
 		});
 
-		noteStyleSectionText = new FlxUIInputText(10, 330, 70, '', 8);
-		blockPressWhileTypingOn.push(noteStyleSectionText);
-
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
 		tab_group_song.add(UI_songTitle);
@@ -620,7 +625,6 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(reloadNotesButton);
 		tab_group_song.add(noteSkinInputText);
 		tab_group_song.add(noteSplashesInputText);
-		tab_group_song.add(noteStyleSectionText);
 		tab_group_song.add(new FlxText(stepperBPM.x, stepperBPM.y - 15, 0, 'Song BPM:'));
 		tab_group_song.add(new FlxText(stepperBPM.x + 100, stepperBPM.y - 15, 0, 'Song Offset:'));
 		tab_group_song.add(new FlxText(stepperSpeed.x, stepperSpeed.y - 15, 0, 'Song Speed:'));
@@ -630,7 +634,6 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(new FlxText(stageDropDown.x, stageDropDown.y - 15, 0, 'Stage:'));
 		tab_group_song.add(new FlxText(noteSkinInputText.x, noteSkinInputText.y - 15, 0, 'Note Texture:'));
 		tab_group_song.add(new FlxText(noteSplashesInputText.x, noteSplashesInputText.y - 15, 0, 'Note Splashes Texture:'));
-		tab_group_song.add(new FlxText(noteStyleSectionText.x, noteStyleSectionText.y - 15, 0, 'Note Style:'));
 		tab_group_song.add(player2DropDown);
 		tab_group_song.add(gfVersionDropDown);
 		tab_group_song.add(player1DropDown);
@@ -647,7 +650,6 @@ class ChartingState extends MusicBeatState
 	var check_changeBPM:FlxUICheckBox;
 	var stepperSectionBPM:FlxUINumericStepper;
 	var check_altAnim:FlxUICheckBox;
-	var noteStyleSectionText:FlxUIInputText;
 
 	var sectionToCopy:Int = 0;
 	var notesCopied:Array<Dynamic>;
@@ -915,6 +917,7 @@ class ChartingState extends MusicBeatState
 	var stepperSusLength:FlxUINumericStepper;
 	var strumTimeInputText:FlxUIInputText; //I wanted to use a stepper but we can't scale these as far as i know :(
 	var noteTypeDropDown:FlxUIDropDownMenuCustom;
+	// var noteStyleDropDown:FlxUIDropDownMenuCustom; // didnt work :|
 	var currentType:Int = 0;
 
 	function addNoteUI():Void
@@ -932,12 +935,21 @@ class ChartingState extends MusicBeatState
 		blockPressWhileTypingOn.push(strumTimeInputText);
 
 		var key:Int = 0;
+		var keyA:Int = 0;
 		var displayNameList:Array<String> = [];
 		while (key < noteTypeList.length) {
 			displayNameList.push(noteTypeList[key]);
 			noteTypeMap.set(noteTypeList[key], key);
 			noteTypeIntMap.set(key, noteTypeList[key]);
 			key++;
+		}
+
+		var displayStyleNameList:Array<String> = [];
+		while (key < noteStyleList.length) {
+			displayStyleNameList.push(noteStyleList[key]);
+			noteStyleMap.set(noteStyleList[key], key);
+			noteStyleIntMap.set(key, noteStyleList[key]);
+			keyA++;
 		}
 
 		#if LUA_ALLOWED
@@ -983,12 +995,23 @@ class ChartingState extends MusicBeatState
 		});
 		blockPressWhileScrolling.push(noteTypeDropDown);
 
+		/*noteStyleDropDown = new FlxUIDropDownMenuCustom(20, 105, FlxUIDropDownMenuCustom.makeStrIdLabelArray(displayStyleNameList, true), function(character:String)
+			{
+				currentType = Std.parseInt(character);
+				if(curSelectedNote != null && curSelectedNote[1] > -1) {
+					curSelectedNote[3] = noteStyleIntMap.get(currentType);
+					updateGrid();
+				}
+			});
+			blockPressWhileScrolling.push(noteStyleDropDown);*/
+
 		tab_group_note.add(new FlxText(10, 10, 0, 'Sustain length:'));
 		tab_group_note.add(new FlxText(10, 50, 0, 'Strum time (in miliseconds):'));
 		tab_group_note.add(new FlxText(10, 90, 0, 'Note type:'));
 		tab_group_note.add(stepperSusLength);
 		tab_group_note.add(strumTimeInputText);
 		tab_group_note.add(noteTypeDropDown);
+		// tab_group_note.add(noteStyleDropDown);
 
 		UI_box.addGroup(tab_group_note);
 	}
@@ -1464,10 +1487,6 @@ class ChartingState extends MusicBeatState
 		else if(id == FlxUIInputText.CHANGE_EVENT && (sender is FlxUIInputText)) {
 			if(sender == noteSplashesInputText) {
 				_song.splashSkin = noteSplashesInputText.text;
-			}
-			else if (sender == noteStyleSectionText)
-			{
-				_song.notes[curSection].noteStyle = noteStyleSectionText.text;
 			}
 			else if(curSelectedNote != null)
 			{
@@ -2506,8 +2525,10 @@ class ChartingState extends MusicBeatState
 					currentType = noteTypeMap.get(curSelectedNote[3]);
 					if(currentType <= 0) {
 						noteTypeDropDown.selectedLabel = '';
+						// noteStyleDropDown.selectedLabel = '';
 					} else {
 						noteTypeDropDown.selectedLabel = currentType + '. ' + curSelectedNote[3];
+						// noteStyleDropDown.selectedLabel = currentType + '. ' + curSelectedNote[3];
 					}
 				}
 			} else {
