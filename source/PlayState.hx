@@ -2287,7 +2287,7 @@ class PlayState extends MusicBeatState
 	public function updateScore(miss:Bool = false)
 	{
 		scoreTxt.text = 'Score: ' + songScore
-		+ '\nHealth: ' + Math.round(health * 50.0)
+		+ '\nHealth: ' + Math.round(health * 50.0) + '%'
 		+ '\nMisses: ' + songMisses
 		+ '\nRating: ' + ratingName
 		+ (ratingName != '\n?' ? '\n(${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ranking\n' : '');
@@ -2461,7 +2461,7 @@ class PlayState extends MusicBeatState
 
 				var gottaHitNote:Bool = section.mustHitSection;
 
-				if (songNotes[1] > 3)
+				if (songNotes[1] > 3 && CoolUtil.modeString() != 'OPPONENT')
 				{
 					gottaHitNote = !section.mustHitSection;
 				}
@@ -4558,7 +4558,7 @@ class PlayState extends MusicBeatState
 
 			if (note.isSustainNote)
 				{
-					if (health >= 0.23)
+					if (health >= 0.2)
 						{
 							health -= 0.0115 * healthDrain;
 						}
@@ -4566,7 +4566,7 @@ class PlayState extends MusicBeatState
 				}
 				else
 				{
-					if (health >= 0.23)
+					if (health >= 0.2)
 						{
 							health -= 0.023 * healthDrain;
 						}
