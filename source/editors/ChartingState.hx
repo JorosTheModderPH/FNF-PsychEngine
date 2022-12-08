@@ -77,8 +77,8 @@ class ChartingState extends MusicBeatState
 	];
 	private var noteTypeIntMap:Map<Int, String> = new Map<Int, String>();
 	private var noteTypeMap:Map<String, Null<Int>> = new Map<String, Null<Int>>();
-	private var noteStyleIntMap:Map<Int, String> = new Map<Int, String>();
-	private var noteStyleMap:Map<String, Null<Int>> = new Map<String, Null<Int>>();
+	// private var noteStyleIntMap:Map<Int, String> = new Map<Int, String>();
+	// private var noteStyleMap:Map<String, Null<Int>> = new Map<String, Null<Int>>();
 	public var ignoreWarnings = false;
 	var undos = [];
 	var redos = [];
@@ -316,7 +316,7 @@ class ChartingState extends MusicBeatState
 
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		for (i in 0...8){
-			var note:StrumNote = new StrumNote(GRID_SIZE * (i+1), strumLine.y, i % 4, 0, '');
+			var note:StrumNote = new StrumNote(GRID_SIZE * (i+1), strumLine.y, i % 4, 0/*, ''*/);
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 			note.updateHitbox();
 			note.playAnim('static', true);
@@ -950,13 +950,13 @@ class ChartingState extends MusicBeatState
 			key++;
 		}
 
-		var displayStyleNameList:Array<String> = [];
+		/*var displayStyleNameList:Array<String> = [];
 		while (key < noteStyleList.length) {
 			displayStyleNameList.push(noteStyleList[key]);
 			noteStyleMap.set(noteStyleList[key], key);
 			noteStyleIntMap.set(key, noteStyleList[key]);
 			keyA++;
-		}
+		}*/
 
 		#if LUA_ALLOWED
 		var directories:Array<String> = [];
@@ -2777,7 +2777,7 @@ class ChartingState extends MusicBeatState
 			sectionNotes: [],
 			typeOfSection: 0,
 			altAnim: false,
-			noteStyle: ''
+			// noteStyle: ''
 		};
 
 		_song.notes.push(sec);

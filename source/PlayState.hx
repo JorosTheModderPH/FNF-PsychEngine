@@ -1343,7 +1343,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000;
 
-		boyfriend.alpha = 0; //remove characters, we don't need
+		boyfriend.alpha = 0; //remove characters, we don't need it
 		dad.alpha = 0;
 		gf.alpha = 0;
 
@@ -2451,10 +2451,10 @@ class PlayState extends MusicBeatState
 		{
 			for (songNotes in section.sectionNotes)
 			{
-				var noteStyle:String = isPixelStage ? 'pixel' : '';
+				// var noteStyle:String = isPixelStage ? 'pixel' : '';
 
-				if (section.noteStyle != '' || section.noteStyle != null)
-					noteStyle = section.noteStyle;
+				/*if (section.noteStyle != '' || section.noteStyle != null)
+					noteStyle = section.noteStyle;*/
 
 				var daStrumTime:Float = songNotes[0];
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
@@ -2486,7 +2486,7 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, false, noteStyle);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, false/*, noteStyle*/);
 				swagNote.mustPress = gottaHitNote;
 				swagNote.sustainLength = songNotes[2];
 				swagNote.gfNote = (section.gfSection && (songNotes[1]<4));
@@ -2509,7 +2509,7 @@ class PlayState extends MusicBeatState
 						var sustainNote:Note = new Note(daStrumTime
 							+ (Conductor.stepCrochet * susNote)
 							+ (Conductor.stepCrochet / FlxMath.roundDecimal(songSpeed, 2)), daNoteData, oldNote,
-							true, false, noteStyle);
+							true, false/*, noteStyle*/);
 						sustainNote.mustPress = gottaHitNote;
 						sustainNote.gfNote = (section.gfSection && (songNotes[1]<4));
 						sustainNote.noteType = swagNote.noteType;
@@ -2683,21 +2683,21 @@ class PlayState extends MusicBeatState
 	}
 
 	public var skipArrowStartTween:Bool = false; //for lua
-	private function generateStaticArrows(player:Int, ?noteStyle:String):Void
+	private function generateStaticArrows(player:Int/*, ?noteStyle:String*/):Void
 	{
 
-		if (isPixelStage)
-			noteStyle = 'pixel';
+		/*if (isPixelStage)
+			noteStyle = "pixel";
 		if (isDorklyStage)
-			noteStyle = 'dorkly';
+			noteStyle = "dorkly";
 
-        if (noteStyle == '' && noteStyle == null)
+        if (noteStyle == "" && noteStyle == null)
 		{
 			if (isPixelStage)
-				noteStyle = 'pixel';
+				noteStyle = "pixel";
 			if (isDorklyStage)
-				noteStyle = 'dorkly';
-		}
+				noteStyle = "dorkly";
+		}*/
 
 		if (ClientPrefs.laneUnderlay)
 			{
@@ -2721,7 +2721,7 @@ class PlayState extends MusicBeatState
 				else if(ClientPrefs.middleScroll) targetAlpha = 0.35;
 			}
 
-			var babyArrow:StrumNote = new StrumNote(ClientPrefs.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X, strumLine.y, i, player, noteStyle);
+			var babyArrow:StrumNote = new StrumNote(ClientPrefs.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X, strumLine.y, i, player);
 			babyArrow.downScroll = ClientPrefs.downScroll;
 			if (!isStoryMode && !skipArrowStartTween)
 			{
@@ -3114,19 +3114,19 @@ class PlayState extends MusicBeatState
 							if (daNote.animation.curAnim.name.endsWith('end')) {
 								daNote.y += 10.5 * (fakeCrochet / 400) * 1.5 * songSpeed + (46 * (songSpeed - 1));
 								daNote.y -= 46 * (1 - (fakeCrochet / 600)) * songSpeed;
-								if (daNote.noteStyle == 'pixel')
+								/*if (daNote.noteStyle == 'pixel')
 								{
 									  daNote.y += 8 + (6 - daNote.originalHeightForCalcs) * PlayState.daPixelZoom;
 								}
 								else
 								{
 									 daNote.y -= 19;
-								}
-								/*if(PlayState.isPixelStage) {
+								}*/
+								if(PlayState.isPixelStage) {
 									daNote.y += 8 + (6 - daNote.originalHeightForCalcs) * PlayState.daPixelZoom;
 								} else {
 									daNote.y -= 19;
-								}*/
+								}
 							}
 							daNote.y += (Note.swagWidth / 2) - (60.5 * (songSpeed - 1));
 							daNote.y += 27.5 * ((SONG.bpm / 100) - 1) * (songSpeed - 1);
@@ -4695,23 +4695,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public function spawnNoteSplash(x:Float, y:Float, data:Int, ?note:Note = null) {
-		var skin:String;
-
-		if (note != null)
-			{
-				switch (note.noteStyle)
-				{
-					case 'dorkly':
-						skin = 'dorklyUI/noteSplashes';
-					default:
-						skin = 'noteSplashes';
-				}
-			}
-			else
-			{
-				skin = 'noteSplashes';
-			}
-
+		var skin:String = 'noteSplashes';
 		if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) skin = PlayState.SONG.splashSkin;
 
 		var hue:Float = 0;
@@ -4731,7 +4715,7 @@ class PlayState extends MusicBeatState
 		}
 
 		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-		splash.setupNoteSplash(x, y, data, skin, hue, sat, brt, note.noteStyle);
+		splash.setupNoteSplash(x, y, data, skin, hue, sat, brt);
 		grpNoteSplashes.add(splash);
 	}
 

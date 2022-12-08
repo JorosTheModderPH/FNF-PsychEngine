@@ -92,7 +92,7 @@ class Note extends FlxSprite
 	public var noMissAnimation:Bool = false;
 	public var hitCausesMiss:Bool = false;
 	public var distance:Float = 2000; //plan on doing scroll directions soon -bb
-	public var noteStyle:String = ''; 
+	// public var noteStyle:String = ''; 
 
 	public var hitsoundDisabled:Bool = false;
 
@@ -162,30 +162,16 @@ class Note extends FlxSprite
 		return value;
 	}
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false, ?noteStyle:String = '')
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false)
 	{
 		super();
 
 		if (prevNote == null)
 			prevNote = this;
 
-		this.noteStyle = noteStyle;
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 		this.inEditor = inEditor;
-
-		var randomness:Int = FlxG.random.int(0, 3);
-
-		/*if (isSustainNote)
-			{
-				this.noteData = Std.int(Math.abs(randomness - noteData)); // FlipX notes to be hit.
-		        noteData = Std.int(Math.abs(randomness - noteData)); // FlipX noteData sprite (0 = purple, 1 = blue, 2 = green, 3 = red).
-			}
-			else
-			{
-				this.noteData = Std.int(Math.abs(3 + noteData));
-		        noteData = Std.int(Math.abs(3 + noteData));
-			}*/
 
 		x += (ClientPrefs.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
@@ -229,7 +215,7 @@ class Note extends FlxSprite
 
 			offsetX -= width / 2;
 
-			if (noteStyle == 'pixel')
+			if (PlayState.isPixelStage)
 				offsetX += 30;
 
 			if (prevNote.isSustainNote)
@@ -242,16 +228,15 @@ class Note extends FlxSprite
 					prevNote.scale.y *= PlayState.instance.songSpeed;
 				}
 
-				if (noteStyle == 'pixel')
-				{
+				if(PlayState.isPixelStage) {
 					prevNote.scale.y *= 1.19;
+					prevNote.scale.y *= (6 / height); //Auto adjust note size
 				}
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
 
-			if (noteStyle == 'pixel')
-			{
+			if(PlayState.isPixelStage) {
 				scale.y *= PlayState.daPixelZoom;
 				updateHitbox();
 			}
@@ -289,7 +274,7 @@ class Note extends FlxSprite
 
 		var lastScaleY:Float = scale.y;
 		var blahblah:String = arraySkin.join('/');
-		switch (noteStyle) //notestyle stuff by Doki-Doki Devs
+		/*switch (noteStyle) //notestyle stuff by Doki-Doki Devs
 		{
 			case 'pixel':
 				if (isSustainNote)
@@ -317,7 +302,7 @@ class Note extends FlxSprite
 			    frames = Paths.getSparrowAtlas(blahblah);
 				loadNoteAnims();
 				antialiasing = ClientPrefs.globalAntialiasing;
-		}
+		}*/
 
         /*if(PlayState.SONG.song == 'Washed-Up-V2')
 		{
@@ -327,6 +312,40 @@ class Note extends FlxSprite
 		{
 			frames = Paths.getSparrowAtlas(blahblah);
 		}*/
+		if(PlayState.isPixelStage) {
+			if(isSustainNote) {
+				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'));
+				width = width / 4;
+				height = height / 2;
+				originalHeightForCalcs = height;
+				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'), true, Math.floor(width), Math.floor(height));
+			} else {
+				loadGraphic(Paths.image('pixelUI/' + blahblah));
+				width = width / 4;
+				height = height / 5;
+				loadGraphic(Paths.image('pixelUI/' + blahblah), true, Math.floor(width), Math.floor(height));
+			}
+			setGraphicSize(Std.int(width * PlayState.daPixelZoom));
+			loadPixelNoteAnims();
+			antialiasing = false;
+
+			if(isSustainNote) {
+				offsetX += lastNoteOffsetXForPixelAutoAdjusting;
+				lastNoteOffsetXForPixelAutoAdjusting = (width - 7) * (PlayState.daPixelZoom / 2);
+				offsetX -= lastNoteOffsetXForPixelAutoAdjusting;
+
+				/*if(animName != null && !animName.endsWith('end'))
+				{
+					lastScaleY /= lastNoteScaleToo;
+					lastNoteScaleToo = (6 / height);
+					lastScaleY *= lastNoteScaleToo;
+				}*/
+			}
+		} else {
+			frames = Paths.getSparrowAtlas(blahblah);
+			loadNoteAnims();
+			antialiasing = ClientPrefs.globalAntialiasing;
+		}
 
 		if(isSustainNote) {
 			scale.y = lastScaleY;
