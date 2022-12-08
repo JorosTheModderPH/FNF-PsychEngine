@@ -4944,15 +4944,19 @@ class PlayState extends MusicBeatState
 			ranking = "";
 			if (ratingPercent >= 1) ranking = "[S+]";
 			else if (ratingPercent >= 0.95) ranking = "[S]";
-			else if (ratingPercent >= 0.9) ranking = "[AA]";
-			else if (ratingPercent >= 0.85) ranking = "[A]";
-			else if (ratingPercent >= 0.8) ranking = "[B]";
-			else if (ratingPercent >= 0.75) ranking = "[B-]";
-			else if (ratingPercent >= 0.7) ranking = "[C]";
-			else if (ratingPercent >= 0.65) ranking = "[C-]";
-			else if (ratingPercent >= 0.6) ranking = "[D]";
+			else if (ratingPercent >= 0.925) ranking = "[A+]";
+			else if (ratingPercent >= 0.912) ranking = "[A]";
+			else if (ratingPercent >= 0.9) ranking = "[A-]";
+			else if (ratingPercent >= 0.85) ranking = "[B+]";
+			else if (ratingPercent >= 0.825) ranking = "[B]";
+			else if (ratingPercent >= 0.8) ranking = "[B-]";
+			else if (ratingPercent >= 0.75) ranking = "[C+]";
+			else if (ratingPercent >= 0.725) ranking = "[C]";
+			else if (ratingPercent >= 0.7) ranking = "[C-]";
+			else if (ratingPercent >= 0.6) ranking = "[D+]";
+			else if (ratingPercent >= 0.45) ranking = "[D]";
 			else if (ratingPercent >= 0.3) ranking = "[D-]";
-			else if (ratingPercent >= 0.2) ranking = "[F]";
+			else if (ratingPercent >= 0.01) ranking = "[F]";
 			else if (ratingPercent >= 0.0) ranking = "[?]";
 		}
 		updateScore(badHit); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce -Ghost
