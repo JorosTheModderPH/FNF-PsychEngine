@@ -30,6 +30,7 @@ class ClientPrefs {
 	public static var noReset:Bool = false;
 	public static var laneUnderlay:Bool = true;
 	public static var darkenScreen:Bool = true;
+	public static var newHealthSystem:Bool = true;
 	public static var healthBarAlpha:Float = 1;
 	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
@@ -121,6 +122,7 @@ class ClientPrefs {
 		FlxG.save.data.noReset = noReset;
 		FlxG.save.data.laneUnderlay = laneUnderlay;
 		FlxG.save.data.darkenScreen = darkenScreen;
+		FlxG.save.data.newHealthSystem = newHealthSystem;
 		FlxG.save.data.healthBarAlpha = healthBarAlpha;
 		FlxG.save.data.comboOffset = comboOffset;
 		FlxG.save.data.achievementsMap = Achievements.achievementsMap;

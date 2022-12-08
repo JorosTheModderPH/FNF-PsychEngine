@@ -3283,7 +3283,7 @@ class PlayState extends MusicBeatState
 				for (timer in modchartTimers) {
 					timer.active = true;
 				}
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollowPos.x, camFollowPos.y));
+				FlxG.resetState();
 
 				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
@@ -4556,7 +4556,7 @@ class PlayState extends MusicBeatState
 					}
 			}*/
 
-			if (note.isSustainNote)
+			if (note.isSustainNote && ClientPrefs.newHealthSystem)
 				{
 					if (health >= 0.2)
 						{
@@ -4617,11 +4617,21 @@ class PlayState extends MusicBeatState
 					combo += 1;
 					if(combo > 9999) combo = 9999;
 					popUpScore(note);
-					health += note.hitHealth * healthGain;
-					health -= healthDmg * healthLoss;
 					healthDmg = 0;
 				}
-				
+
+				if (ClientPrefs.newHealthSystem)
+					{
+						health += note.hitHealth * healthGain;
+						health -= healthDmg * healthLoss;
+						healthDmg = 0;
+					}
+					else
+					{
+						health += note.hitHealth * healthGain;
+					}
+
+				RecalculateRating(true);
 	
 				if(!note.noAnimation) {
 					var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];

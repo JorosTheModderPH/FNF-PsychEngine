@@ -159,6 +159,13 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			true);
 		addOption(option);
 
+		var option:Option = new Option('New Health System',
+			"If unchecked, then it uses the old health system.",
+			'newHealthSystem',
+			'bool',
+			true);
+		addOption(option);
+
 		super();
 	}
 
