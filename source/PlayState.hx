@@ -4534,7 +4534,7 @@ class PlayState extends MusicBeatState
 			note.destroy();
 		}
 
-		updateScore(true);
+		RecalculateRating(true);
 
 		/*if (PlayState.SONG.song == 'Washed-Up-V2') // This code is for testing purposes only, not for the mods.
 			{
