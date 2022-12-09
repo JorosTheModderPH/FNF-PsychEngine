@@ -226,6 +226,9 @@ class ClientPrefs {
 		if(FlxG.save.data.darkenScreen != null) {
 			darkenScreen = FlxG.save.data.darkenScreen;
 		}
+		if(FlxG.save.data.newHealthSystem != null) {
+			newHealthSystem = FlxG.save.data.newHealthSystem;
+		}
 		if(FlxG.save.data.healthBarAlpha != null) {
 			healthBarAlpha = FlxG.save.data.healthBarAlpha;
 		}
