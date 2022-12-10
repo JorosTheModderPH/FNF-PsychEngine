@@ -3283,7 +3283,7 @@ class PlayState extends MusicBeatState
 				for (timer in modchartTimers) {
 					timer.active = true;
 				}
-				FlxG.resetState();
+				MusicBeatState.resetState();
 
 				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
@@ -4617,12 +4617,14 @@ class PlayState extends MusicBeatState
 					combo += 1;
 					if(combo > 9999) combo = 9999;
 					popUpScore(note);
-					healthDmg = 0;
 				}
 
 				if (ClientPrefs.newHealthSystem)
 					{
-						health += note.hitHealth * healthGain;
+						if (!note.isSustainNote)
+							{
+								health += note.hitHealth * healthGain;
+							}
 						health -= healthDmg * healthLoss;
 						healthDmg = 0;
 					}
