@@ -132,6 +132,12 @@ class PlayState extends MusicBeatState
 	public var songSpeedType:String = "multiplicative";
 	public var noteKillOffset:Float = 350;
 
+	/* public static var badNoteTypeList:Array<String> =
+	[
+		'Hurt Note',
+		'No Animation'
+	]; */
+
 	public var playbackRate(default, set):Float = ClientPrefs.getGameplaySetting('songspeed', 1);
 
 	public var boyfriendGroup:FlxSpriteGroup;
@@ -209,6 +215,7 @@ class PlayState extends MusicBeatState
 	public var endingSong:Bool = false;
 	public var startingSong:Bool = false;
 	public static var preloadSong:Bool = false;
+	public static var calculateTotalScore:Bool = false;
 	private var updateTime:Bool = true;
 	public static var changedDifficulty:Bool = false;
 	public static var chartingMode:Bool = false;
@@ -278,6 +285,7 @@ class PlayState extends MusicBeatState
 	var foregroundSprites:FlxTypedGroup<BGSprite>;
 
 	public var songScore:Int = 0;
+	public var songMaxScore:Int = 0;
 	public var songHits:Int = 0;
 	public var songMisses:Int = 0;
 	public var scoreTxt:FlxText;
@@ -439,8 +447,9 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
-		#if desktop
 		storyDifficultyText = CoolUtil.difficulties[storyDifficulty];
+
+		#if desktop
 
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		if (isStoryMode)
@@ -2122,8 +2131,9 @@ class PlayState extends MusicBeatState
 								FlxG.resetState();
 							}
 						preloadSong = true;
+						calculateTotalScore = false;
 					}
-				
+
 				if (gf != null && tmr.loopsLeft % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
 				{
 					gf.dance();
@@ -2286,13 +2296,14 @@ class PlayState extends MusicBeatState
 
 	public function updateScore(miss:Bool = false)
 	{
-		scoreTxt.text = 'Score: ' + songScore
+		scoreTxt.text = '\nScore: ' + songScore + '/' + songMaxScore
 		+ '\nHealth: ' + Math.round(health * 50.0) + '%'
 		+ '\nMisses: ' + songMisses
 		+ '\nRating: ' + ratingName
-		+ (ratingName != '\n?' ? '\n(${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ranking\n' : '');
+		+ '\nRank: ' + ranking
+		+ '\nAccuracy: (${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ratingFC\n' + '';
 
-		if(ClientPrefs.scoreZoom && !miss && !cpuControlled)
+		if(ClientPrefs.scoreZoom && !miss /*&& !cpuControlled*/)
 		{
 			if(scoreTxtTween != null) {
 				scoreTxtTween.cancel();
@@ -2419,6 +2430,8 @@ class PlayState extends MusicBeatState
 
 		var playerCounter:Int = 0;
 
+		var maxScore:Int = 0;
+
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 
 		var songName:String = Paths.formatToSongPath(SONG.song);
@@ -2474,7 +2487,7 @@ class PlayState extends MusicBeatState
 				{
 					case 'STANDARD' : // Default Mode
 						daNoteData = Std.int(songNotes[1] % 4);
-					case 'COMPACT' : // Compact Modes
+					case 'COMPACT' : // Compact Mode
 					    section.mustHitSection = true;
 					case 'RANDOMIZED' : // Randomized Mode
 						daNoteData = FlxG.random.int(0, 3);
@@ -2491,6 +2504,8 @@ class PlayState extends MusicBeatState
 				swagNote.sustainLength = songNotes[2];
 				swagNote.gfNote = (section.gfSection && (songNotes[1]<4));
 				swagNote.noteType = songNotes[3];
+				// if(swagNote.noteType == 'Hurt Note') swagNote.noteType = null; // noteTypeMap.set(swagNote.noteType, true);
+
 				if(!Std.isOfType(songNotes[3], String)) swagNote.noteType = editors.ChartingState.noteTypeList[songNotes[3]]; //Backward compatibility + compatibility with Week 7 charts
 
 				swagNote.scrollFactor.set();
@@ -2535,7 +2550,11 @@ class PlayState extends MusicBeatState
 
 				if (swagNote.mustPress)
 				{
+
+					// var badNoteType = Std.string(badNoteTypeList); // didnt work anyways... link: https://stackoverflow.com/questions/14778021/haxe-int-to-string
+
 					swagNote.x += FlxG.width / 2; // general offset
+					if (swagNote.noteType != 'Hurt Note' ) maxScore += 1*350;
 				}
 				else if(ClientPrefs.middleScroll)
 				{
@@ -2569,8 +2588,16 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		if (!calculateTotalScore)
+			{
+				songMaxScore += maxScore;
+			}
+		calculateTotalScore = true;
+
 		// trace(unspawnNotes.length);
 		// playerCounter += 1;
+
+		trace('Total Score: $maxScore');
 
 		unspawnNotes.sort(sortByShit);
 		if(eventNotes.length > 1) { //No need to sort if there's a single one or none at all
@@ -2933,6 +2960,7 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.anyJustPressed(debugKeysChart) && !endingSong && !inCutscene)
 		{
 			openChartEditor();
+			calculateTotalScore = false;
 		}
 
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
@@ -3179,7 +3207,7 @@ class PlayState extends MusicBeatState
 					// Kill extremely late notes and cause misses
 					if (Conductor.songPosition > noteKillOffset + daNote.strumTime)
 					{
-						if (daNote.mustPress && !cpuControlled &&!daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit)) {
+						if (daNote.mustPress /*!cpuControlled*/ && !daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit)) {
 							noteMiss(daNote);
 						}
 
@@ -3283,6 +3311,7 @@ class PlayState extends MusicBeatState
 				for (timer in modchartTimers) {
 					timer.active = true;
 				}
+				
 				MusicBeatState.resetState();
 
 				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
@@ -3814,6 +3843,7 @@ class PlayState extends MusicBeatState
 		deathCounter = 0;
 		seenCutscene = false;
 		preloadSong = false;
+		calculateTotalScore = false;
 
 		#if ACHIEVEMENTS_ALLOWED
 		if(achievementObj != null) {
@@ -3832,7 +3862,7 @@ class PlayState extends MusicBeatState
 
 		var ret:Dynamic = callOnLuas('onEndSong', [], false);
 		if(ret != FunkinLua.Function_Stop && !transitioning) {
-			if (SONG.validScore)
+			if (SONG.validScore && !ClientPrefs.getGameplaySetting('botplay', false))
 			{
 				#if !switch
 				var percent:Float = ratingPercent;
@@ -3870,7 +3900,7 @@ class PlayState extends MusicBeatState
 					if(!ClientPrefs.getGameplaySetting('practice', false) && !ClientPrefs.getGameplaySetting('botplay', false)) {
 						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyWeek], true);
 
-						if (SONG.validScore)
+						if (SONG.validScore && !ClientPrefs.getGameplaySetting('botplay', false))
 						{
 							Highscore.saveWeekScore(WeekData.getWeekFileName(), campaignScore, storyDifficulty);
 						}
@@ -4027,7 +4057,7 @@ class PlayState extends MusicBeatState
 			spawnNoteSplashOnNote(note);
 		}
 
-		if(!practiceMode && !cpuControlled) {
+		if(!practiceMode/* && !cpuControlled*/) {
 			songScore += score;
 			if(!note.ratingDisabled)
 			{
@@ -4901,7 +4931,9 @@ class PlayState extends MusicBeatState
 
 	public var ratingName:String = '?';
 	public var ratingPercent:Float;
-	public var ranking:String;
+	public var ratingFC:String = '?';
+	
+	public var ranking:String = '?';
 	public function RecalculateRating(badHit:Bool = false) {
 		setOnLuas('score', songScore);
 		setOnLuas('misses', songMisses);
@@ -4937,7 +4969,7 @@ class PlayState extends MusicBeatState
 			}
 
 			// Ranking
-			ranking = "";
+			ranking = "?";
 			if (ratingPercent >= 1) ranking = "[S+]";
 			else if (ratingPercent >= 0.95) ranking = "[S]";
 			else if (ratingPercent >= 0.925) ranking = "[A+]";
@@ -4952,12 +4984,21 @@ class PlayState extends MusicBeatState
 			else if (ratingPercent >= 0.6) ranking = "[D+]";
 			else if (ratingPercent >= 0.45) ranking = "[D]";
 			else if (ratingPercent >= 0.3) ranking = "[D-]";
-			else if (ratingPercent >= 0.01) ranking = "[F]";
-			else if (ratingPercent >= 0.0) ranking = "[?]";
+			else if (ratingPercent >= 0.2) ranking = "[F]";
+
+			// Rating FC
+			ratingFC = "?";
+			if (sicks > 0) ratingFC = "SFC";
+			if (goods > 0) ratingFC = "GFC";
+			if (bads > 0 || shits > 0) ratingFC = "FC";
+			if (songMisses > 0 && songMisses < 10) ratingFC = "SDCB";
+			else if (songMisses >= 10) ratingFC = "Clear";
 		}
 		updateScore(badHit); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce -Ghost
 		setOnLuas('rating', ratingPercent);
 		setOnLuas('ratingName', ratingName);
+		setOnLuas('ratingFC', ratingFC);
+
 		setOnLuas('ranking', ranking);
 	}
 

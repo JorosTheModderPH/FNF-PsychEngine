@@ -220,6 +220,7 @@ class PauseSubState extends MusicBeatSubstate
 					regenMenu();
 					
 					PlayState.preloadSong = false;
+					PlayState.calculateTotalScore = false;
 				case 'Toggle Practice Mode':
 					PlayState.instance.practiceMode = !PlayState.instance.practiceMode;
 					PlayState.changedDifficulty = true;
@@ -257,6 +258,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
 					PlayState.preloadSong = false;
+					PlayState.calculateTotalScore = false;
 
 					WeekData.loadTheFirstEnabledMod();
 					if(PlayState.isStoryMode) {

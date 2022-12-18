@@ -69,12 +69,13 @@ class ChartingState extends MusicBeatState
 		'GF Sing',
 		'No Animation'
 	];
-	public static var noteStyleList:Array<String> =
+	/*public static var noteStyleList:Array<String> =
 	[
 		'',
 		'pixel',
 		'dorkly'
-	];
+	];*/
+	
 	private var noteTypeIntMap:Map<Int, String> = new Map<Int, String>();
 	private var noteTypeMap:Map<String, Null<Int>> = new Map<String, Null<Int>>();
 	// private var noteStyleIntMap:Map<Int, String> = new Map<Int, String>();
