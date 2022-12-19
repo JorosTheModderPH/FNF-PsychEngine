@@ -3321,6 +3321,7 @@ class PlayState extends MusicBeatState
 				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 				#end
 				isDead = true;
+				calculateTotalScore = false;
 				return true;
 			}
 		}
@@ -4984,7 +4985,10 @@ class PlayState extends MusicBeatState
 			else if (ratingPercent >= 0.6) ranking = "[D+]";
 			else if (ratingPercent >= 0.45) ranking = "[D]";
 			else if (ratingPercent >= 0.3) ranking = "[D-]";
-			else if (ratingPercent >= 0.2) ranking = "[F]";
+			else if (ratingPercent >= 0.2) ranking = "[F+]";
+			else if (ratingPercent >= 0.1) ranking = "[F]";
+			else if (ratingPercent >= 0.05) ranking = "[F-]";
+			else if (ratingPercent >= 0.001) ranking = "[F-]";
 
 			// Rating FC
 			ratingFC = "?";
