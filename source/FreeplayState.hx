@@ -54,6 +54,7 @@ class FreeplayState extends MusicBeatState
 	var colorTween:FlxTween;
 
 	var justPressedForMode:Bool = false;
+	var switchingMode:Bool = false;
 
 	override function create()
 	{
@@ -283,7 +284,7 @@ class FreeplayState extends MusicBeatState
 			ratingSplit[1] += '0';
 		}
 
-		scoreText.text = 'PERSONAL BEST: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
+		if (!switchingMode) scoreText.text = 'PERSONAL BEST: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
 		positionHighscore();
 
 		var upP = controls.UI_UP_P;
@@ -330,15 +331,23 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		if (controls.UI_LEFT_P)
+		if (controls.UI_LEFT_P) {
 			changeDiff(-1);
-		else if (controls.UI_RIGHT_P)
+		    switchingMode = false;
+		}
+		else if (controls.UI_RIGHT_P) {
 			changeDiff(1);
-		else if (upP || downP) changeDiff();
+		    switchingMode = false;
+		}
+		else if (upP || downP)  {
+			changeDiff();
+		    switchingMode = false;
+		}
 
 		if (alt)
-			if(justPressedForMode) {
+			if(justPressedForMode) { // switchingMode
 				changeMode(1);
+				switchingMode = true;
 			}
 			else
 			{
