@@ -53,6 +53,8 @@ class FreeplayState extends MusicBeatState
 	var intendedColor:Int;
 	var colorTween:FlxTween;
 
+	var justPressedForMode:Bool = false;
+
 	override function create()
 	{
 		//Paths.clearStoredMemory();
@@ -256,6 +258,14 @@ class FreeplayState extends MusicBeatState
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
 
+		var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
+		var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
+
+		if (!sys.FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop)))
+        {
+			changeSelection(1);
+		}
+
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, CoolUtil.boundTo(elapsed * 24, 0, 1)));
 		lerpRating = FlxMath.lerp(lerpRating, intendedRating, CoolUtil.boundTo(elapsed * 12, 0, 1));
 
@@ -327,7 +337,15 @@ class FreeplayState extends MusicBeatState
 		else if (upP || downP) changeDiff();
 
 		if (alt)
-			changeMode(1);
+			if(justPressedForMode) {
+				changeMode(1);
+			}
+			else
+			{
+				justPressedForMode = true;
+				modeText.text = '< ' + CoolUtil.modeString() + ' >';
+			}
+
 
 		if (controls.BACK)
 		{
@@ -375,7 +393,16 @@ class FreeplayState extends MusicBeatState
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
-			var plswork:String = CoolUtil.modeString();
+			var eh:String = CoolUtil.modeString();
+
+			PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+			PlayState.isStoryMode = false;
+			PlayState.storyDifficulty = curDifficulty;
+			PlayState.storyMode = curMode;
+
+			trace(poop);
+			trace(eh);
+			
 			/*#if MODS_ALLOWED
 			if(!sys.FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop))) {
 			#else
@@ -385,10 +412,9 @@ class FreeplayState extends MusicBeatState
 				curDifficulty = 1;
 				trace('Couldnt find file');
 			}*/
-			trace(poop);
-			trace(plswork);
+			
 
-			if (!sys.FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop)))
+			/* if (!sys.FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop)))
             {
 				return MusicBeatState.switchState(new FreeplayState());
 			}
@@ -398,7 +424,10 @@ class FreeplayState extends MusicBeatState
 				PlayState.isStoryMode = false;
 			    PlayState.storyDifficulty = curDifficulty;
 				PlayState.storyMode = curMode;
-			}
+
+				trace(poop);
+			    trace(eh);
+			}*/
 
 			trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
 			if(colorTween != null) {
@@ -473,7 +502,7 @@ class FreeplayState extends MusicBeatState
 		PlayState.storyDifficulty = curDifficulty;
 		PlayState.storyMode = curMode;
 		modeText.text = '< ' + CoolUtil.modeString() + ' >';
-		positionHighscore();
+
 	}
 
 	function changeSelection(change:Int = 0, playSound:Bool = true)
@@ -600,6 +629,8 @@ class FreeplayState extends MusicBeatState
 		modeText.x = Std.int(scoreBG.x + (scoreBG.width / 1.75));
 		modeText.x -= diffText.width / 1.75;
 	}
+
+	
 }
 
 class SongMetadata
