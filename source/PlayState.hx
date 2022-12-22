@@ -1383,7 +1383,7 @@ class PlayState extends MusicBeatState
 	}
 
 	#if (!flash && sys)
-	public var runtimeShaders:Map<String, Array<String>> = new Map<String, Array<String>>();
+	/*public var runtimeShaders:Map<String, Array<String>> = new Map<String, Array<String>>();
 	public function createRuntimeShader(name:String):FlxRuntimeShader
 	{
 		if(!ClientPrefs.shaders) return new FlxRuntimeShader();
@@ -1413,7 +1413,7 @@ class PlayState extends MusicBeatState
 			return true;
 		}
 
-		var foldersToCheck:Array<String> = [Paths.mods('shaders/')];
+		 var foldersToCheck:Array<String> = [Paths.mods('shaders/')];
 		if(Paths.currentModDirectory != null && Paths.currentModDirectory.length > 0)
 			foldersToCheck.insert(0, Paths.mods(Paths.currentModDirectory + '/shaders/'));
 
@@ -1451,7 +1451,7 @@ class PlayState extends MusicBeatState
 		}
 		FlxG.log.warn('Missing shader $name .frag AND .vert files!');
 		return false;
-	}
+	}*/
 	#end
 
 	function set_songSpeed(value:Float):Float
@@ -3845,7 +3845,7 @@ class PlayState extends MusicBeatState
 		seenCutscene = false;
 		preloadSong = false;
 		calculateTotalScore = false;
-
+		
 		#if ACHIEVEMENTS_ALLOWED
 		if(achievementObj != null) {
 			return;
