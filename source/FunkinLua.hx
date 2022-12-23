@@ -2874,7 +2874,7 @@ class FunkinLua {
 	}
 
 	#if (!flash && sys)
-	/*public function getShader(obj:String):FlxRuntimeShader
+	public function getShader(obj:String):FlxRuntimeShader
 	{
 		var killMe:Array<String> = obj.split('.');
 		var leObj:FlxSprite = getObjectDirectly(killMe[0]);
@@ -2888,12 +2888,12 @@ class FunkinLua {
 			return shader;
 		}
 		return null;
-	}*/
+	}
 	#end
 	
 	function initLuaShader(name:String, ?glslVersion:Int = 120)
 	{
-		/*if(!ClientPrefs.shaders) return false;
+		if(!ClientPrefs.shaders) return false;
 
 		#if (!flash && sys)
 		if(PlayState.instance.runtimeShaders.exists(name))
@@ -2942,7 +2942,7 @@ class FunkinLua {
 		#else
 		luaTrace('This platform doesn\'t support Runtime Shaders!', false, false, FlxColor.RED);
 		#end
-		return false;*/
+		return false;
 	}
 
 	function getGroupStuff(leArray:Dynamic, variable:String) {
