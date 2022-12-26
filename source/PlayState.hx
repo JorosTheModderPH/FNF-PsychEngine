@@ -145,7 +145,6 @@ class PlayState extends MusicBeatState
 	public var gfGroup:FlxSpriteGroup;
 	public static var curStage:String = '';
 	public static var isPixelStage:Bool = false;
-	public static var isDorklyStage:Bool = false;
 	public static var SONG:SwagSong = null;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
@@ -501,7 +500,6 @@ class PlayState extends MusicBeatState
 				directory: "",
 				defaultZoom: 0.9,
 				isPixelStage: false,
-				isDorklyStage: false,
 
 				boyfriend: [770, 100],
 				girlfriend: [400, 130],
@@ -517,7 +515,6 @@ class PlayState extends MusicBeatState
 
 		defaultCamZoom = stageData.defaultZoom;
 		isPixelStage = stageData.isPixelStage;
-		isDorklyStage = stageData.isDorklyStage;
 		BF_X = stageData.boyfriend[0];
 		BF_Y = stageData.boyfriend[1];
 		GF_X = stageData.girlfriend[0];
@@ -734,6 +731,26 @@ class PlayState extends MusicBeatState
 				ground.setGraphicSize(Std.int(1.15 * ground.width));
 				ground.updateHitbox();
 				add(ground);
+
+			case 'alley':
+
+		      	var wBg:FlxSprite;
+
+				wBg = new FlxSprite(-500, -300).loadGraphic(Paths.image('background/whitty/whittyBack'));
+				add(wBg);
+
+			case 'ballisticAlley':
+
+			var nwBg:FlxSprite;
+			var waBg = Paths.getSparrowAtlas('background/whitty/BallisticBackground');
+
+			nwBg = new FlxSprite(-600, -200);
+			nwBg.frames = waBg;
+
+			nwBg.animation.addByPrefix('gameButMove', 'Background Whitty Moving', 16, true);
+            nwBg.animation.play('gameButMove');
+
+			add(nwBg);
 
 		}
 
@@ -2715,15 +2732,11 @@ class PlayState extends MusicBeatState
 
 		/*if (isPixelStage)
 			noteStyle = "pixel";
-		if (isDorklyStage)
-			noteStyle = "dorkly";
 
         if (noteStyle == "" && noteStyle == null)
 		{
 			if (isPixelStage)
 				noteStyle = "pixel";
-			if (isDorklyStage)
-				noteStyle = "dorkly";
 		}*/
 
 		if (ClientPrefs.laneUnderlay)
