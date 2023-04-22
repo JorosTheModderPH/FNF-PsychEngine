@@ -262,11 +262,6 @@ class FreeplayState extends MusicBeatState
 		var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 		var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
 
-		if (/*!sys.FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && */!sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop)))
-        {
-			changeSelection(1);
-		}
-
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, CoolUtil.boundTo(elapsed * 24, 0, 1)));
 		lerpRating = FlxMath.lerp(lerpRating, intendedRating, CoolUtil.boundTo(elapsed * 12, 0, 1));
 
@@ -404,10 +399,16 @@ class FreeplayState extends MusicBeatState
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
 			var eh:String = CoolUtil.modeString();
 
-			PlayState.SONG = Song.loadFromJson(poop, songLowercase);
-			PlayState.isStoryMode = false;
-			PlayState.storyDifficulty = curDifficulty;
-			PlayState.storyMode = curMode;
+			if (!sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop)))
+				{
+					FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+					return;
+				} else {
+					PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+			        PlayState.isStoryMode = false;
+			        PlayState.storyDifficulty = curDifficulty;
+			        PlayState.storyMode = curMode;
+				}
 
 			trace(poop);
 			trace(eh);

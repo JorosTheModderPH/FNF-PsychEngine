@@ -58,6 +58,8 @@ import StageData;
 import FunkinLua;
 import DialogueBoxPsych;
 import Conductor.Rating;
+import sys.io.File;
+import haxe.Json;
 
 #if !flash 
 import flixel.addons.display.FlxRuntimeShader;
@@ -2570,8 +2572,19 @@ class PlayState extends MusicBeatState
 
 					// var badNoteType = Std.string(badNoteTypeList); // didnt work anyways... link: https://stackoverflow.com/questions/14778021/haxe-int-to-string
 
+				    var badNoteType:Array<String> = [
+						"Hurt Note"
+				    ]; // i found a better one
+
+					/*var badNoteJson = File.getContent("badNote.json");
+					var badNoteType = Json.parse(badNoteJson);
+					
+					// test
+
+					*/ 
+
 					swagNote.x += FlxG.width / 2; // general offset
-					if (swagNote.noteType != 'Hurt Note' ) maxScore += 1*350;
+					if (badNoteType.indexOf(swagNote.noteType) == -1) maxScore += 1*350;
 				}
 				else if(ClientPrefs.middleScroll)
 				{
@@ -4663,19 +4676,12 @@ class PlayState extends MusicBeatState
 					popUpScore(note);
 				}
 
-				if (ClientPrefs.newHealthSystem)
-					{
-						if (!note.isSustainNote)
-							{
-								health += note.hitHealth * healthGain;
-							}
-						health -= healthDmg * healthLoss;
-						healthDmg = 0;
-					}
-					else
-					{
-						health += note.hitHealth * healthGain;
-					}
+				if (ClientPrefs.newHealthSystem) {
+					if (!note.isSustainNote) health += note.hitHealth * healthGain - healthDmg * healthLoss;
+					healthDmg = 0;
+				} else {
+					health += note.hitHealth * healthGain;
+				}
 
 				RecalculateRating(true);
 	
@@ -4948,6 +4954,7 @@ class PlayState extends MusicBeatState
 	public var ratingFC:String = '?';
 	
 	public var ranking:String = '?';
+
 	public function RecalculateRating(badHit:Bool = false) {
 		setOnLuas('score', songScore);
 		setOnLuas('misses', songMisses);
@@ -4982,26 +4989,22 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			// Ranking
-			ranking = "?";
-			if (ratingPercent >= 1) ranking = "[S+]";
-			else if (ratingPercent >= 0.95) ranking = "[S]";
-			else if (ratingPercent >= 0.925) ranking = "[A+]";
-			else if (ratingPercent >= 0.912) ranking = "[A]";
-			else if (ratingPercent >= 0.9) ranking = "[A-]";
-			else if (ratingPercent >= 0.85) ranking = "[B+]";
-			else if (ratingPercent >= 0.825) ranking = "[B]";
-			else if (ratingPercent >= 0.8) ranking = "[B-]";
-			else if (ratingPercent >= 0.75) ranking = "[C+]";
-			else if (ratingPercent >= 0.725) ranking = "[C]";
-			else if (ratingPercent >= 0.7) ranking = "[C-]";
-			else if (ratingPercent >= 0.6) ranking = "[D+]";
-			else if (ratingPercent >= 0.45) ranking = "[D]";
-			else if (ratingPercent >= 0.3) ranking = "[D-]";
-			else if (ratingPercent >= 0.2) ranking = "[F+]";
-			else if (ratingPercent >= 0.1) ranking = "[F]";
-			else if (ratingPercent >= 0.05) ranking = "[F-]";
-			else if (ratingPercent >= 0.001) ranking = "[F-]";
+			var rankingThresholds:Array<Float> = [
+				1, 0.95, 0.925, 0.912, 0.9, 0.85, 0.825, 0.8,
+				0.75, 0.725, 0.7, 0.6, 0.45, 0.3, 0.2, 0.1, 0.05, 0.001
+			];
+			
+			var rankingValues:Array<String> = [
+				"[S+]", "[S]", "[A+]", "[A]", "[A-]", "[B+]", "[B]", "[B-]",
+				"[C+]", "[C]", "[C-]", "[D+]", "[D]", "[D-]", "[F+]", "[F]", "[F-]", "[F-]"
+			];
+			
+			for (i in 0...rankingThresholds.length) {
+				if (ratingPercent >= rankingThresholds[i]) {
+					ranking = rankingValues[i];
+					break;
+				}
+			}
 
 			// Rating FC
 			ratingFC = "?";
