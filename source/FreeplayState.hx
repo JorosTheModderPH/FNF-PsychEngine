@@ -401,10 +401,20 @@ class FreeplayState extends MusicBeatState
 
 			if (!sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop)))
 				{
-					FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-					return;
+					// FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+					// return;
 				} else {
-					PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+
+					switch(WeekData.getWeekFileName()) // i did this so the assets/data file will look so organized and it saves some time while looking around thorugh assets/data so you wont lose braincell 
+					{
+						case 'mod2':
+							PlayState.SONG = Song.loadFromJson('mod2' , poop, songLowercase);
+						case 'mod1':
+							PlayState.SONG = Song.loadFromJson('mod1' , poop, songLowercase);
+						default:
+							PlayState.SONG = Song.loadFromJson('default' , poop, songLowercase);
+					}
+					
 			        PlayState.isStoryMode = false;
 			        PlayState.storyDifficulty = curDifficulty;
 			        PlayState.storyMode = curMode;

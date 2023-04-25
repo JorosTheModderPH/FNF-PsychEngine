@@ -443,7 +443,7 @@ class PlayState extends MusicBeatState
 		persistentDraw = true;
 
 		if (SONG == null)
-			SONG = Song.loadFromJson('tutorial');
+			SONG = Song.loadFromJson('default' , 'tutorial', 'tutorial');
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -474,19 +474,19 @@ class PlayState extends MusicBeatState
 		if(SONG.stage == null || SONG.stage.length < 1) {
 			switch (songName)
 			{
-				case 'spookeez' | 'south' | 'monster':
+				case 'spookeez' | 'south' | 'monster' | 'spookeez b' | 'south b' | 'monster b': // i have no idea why the b side song that the stage is null or empty but whatever
 					curStage = 'spooky';
-				case 'pico' | 'blammed' | 'philly' | 'philly-nice':
+				case 'pico' | 'blammed' | 'philly' | 'philly-nice' | 'pico b' | 'blammed b' | 'philly b' | 'philly-nice b':
 					curStage = 'philly';
-				case 'milf' | 'satin-panties' | 'high':
+				case 'milf' | 'satin-panties' | 'high' | 'milf b' | 'satin-panties-b' | 'high b':
 					curStage = 'limo';
-				case 'cocoa' | 'eggnog':
+				case 'cocoa' | 'eggnog' | 'cocoa b' | 'eggnog b':
 					curStage = 'mall';
-				case 'winter-horrorland':
+				case 'winter-horrorland' | 'winter-horrorland b':
 					curStage = 'mallEvil';
-				case 'senpai' | 'roses':
+				case 'senpai' | 'roses' | 'senpai b' | 'roses b':
 					curStage = 'school';
-				case 'thorns':
+				case 'thorns' | 'throns b':
 					curStage = 'schoolEvil';
 				case 'ugh' | 'guns' | 'stress':
 					curStage = 'tank';
@@ -768,7 +768,7 @@ class PlayState extends MusicBeatState
 
 		add(gfGroup); //Needed for blammed lights
 
-		// Shitty layering but whatev it works LOL
+		// Shitty layering but whatever it works LOL
 		if (curStage == 'limo')
 			add(limo);
 
@@ -4989,8 +4989,9 @@ class PlayState extends MusicBeatState
 				}
 			}
 
+			// Ranking Stuff
 			var rankingThresholds:Array<Float> = [
-				1, 0.95, 0.925, 0.912, 0.9, 0.85, 0.825, 0.8,
+				1, 0.95, 0.925, 0.9125, 0.9, 0.85, 0.825, 0.8,
 				0.75, 0.725, 0.7, 0.6, 0.45, 0.3, 0.2, 0.1, 0.05, 0.001
 			];
 			
