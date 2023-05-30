@@ -474,19 +474,19 @@ class PlayState extends MusicBeatState
 		if(SONG.stage == null || SONG.stage.length < 1) {
 			switch (songName)
 			{
-				case 'spookeez' | 'south' | 'monster' | 'spookeez b' | 'south b' | 'monster b': // i have no idea why the b side song that the stage is null or empty but whatever
+				case 'spookeez' | 'south' | 'monster':
 					curStage = 'spooky';
-				case 'pico' | 'blammed' | 'philly' | 'philly-nice' | 'pico b' | 'blammed b' | 'philly b' | 'philly-nice b':
+				case 'pico' | 'blammed' | 'philly' | 'philly-nice':
 					curStage = 'philly';
-				case 'milf' | 'satin-panties' | 'high' | 'milf b' | 'satin-panties-b' | 'high b':
+				case 'milf' | 'satin-panties' | 'high':
 					curStage = 'limo';
-				case 'cocoa' | 'eggnog' | 'cocoa b' | 'eggnog b':
+				case 'cocoa' | 'eggnog':
 					curStage = 'mall';
-				case 'winter-horrorland' | 'winter-horrorland b':
+				case 'winter-horrorland':
 					curStage = 'mallEvil';
-				case 'senpai' | 'roses' | 'senpai b' | 'roses b':
+				case 'senpai' | 'roses':
 					curStage = 'school';
-				case 'thorns' | 'throns b':
+				case 'thorns' :
 					curStage = 'schoolEvil';
 				case 'ugh' | 'guns' | 'stress':
 					curStage = 'tank';
@@ -494,6 +494,29 @@ class PlayState extends MusicBeatState
 					curStage = 'stage';
 			}
 		}
+
+		if(WeekData.getWeekFileName() == 'mod2') {
+			switch (songName)
+			{
+				case 'spookeez-b' | 'south-b': // i have no idea why the b side song that the stage is null or empty but whatever
+					curStage = 'spooky';
+				case 'pico-b' | 'blammed-b' | 'philly-b' | 'philly-nice-b':
+					curStage = 'philly';
+				case 'milf-b' | 'satin-panties-b' | 'high-b':
+					curStage = 'limo';
+				case 'cocoa-b' | 'eggnog-b':
+					curStage = 'mall';
+				case 'winter-horrorland-b':
+					curStage = 'mallEvil';
+				case 'senpai-b' | 'roses-b':
+					curStage = 'school';
+				case 'throns-b':
+					curStage = 'schoolEvil';
+				default:
+					curStage = 'stage';
+			}
+		}
+
 		SONG.stage = curStage;
 
 		var stageData:StageFile = StageData.getStageFile(curStage);
@@ -1117,7 +1140,7 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar.createFilledBar(0xFFFF6961, 0xFF77DD77); // Ff6961,77dd77
 		// healthBar
 		healthBar.visible = !ClientPrefs.hideHud;
 		healthBar.alpha = ClientPrefs.healthBarAlpha;
@@ -2316,7 +2339,7 @@ class PlayState extends MusicBeatState
 	public function updateScore(miss:Bool = false)
 	{
 		scoreTxt.text = '\nScore: ' + songScore + '/' + songMaxScore
-		+ '\nHealth: ' + Math.round(health * 50.0) + '%'
+		+ '\nHealth: ' + Highscore.floorDecimal(health * 50, 1)+ '%'
 		+ '\nMisses: ' + songMisses
 		+ '\nRating: ' + ratingName
 		+ '\nRank: ' + ranking
@@ -2483,6 +2506,14 @@ class PlayState extends MusicBeatState
 		{
 			for (songNotes in section.sectionNotes)
 			{
+
+				/*for (i in 0...unspawnNotes.length - 1) {
+					if(!unspawnNotes[i].mustPress)unspawnNotes[i].texture = 'NOTE_assets-alt';
+				}
+				for (i in 0...opponentStrums.length) {
+					opponentStrums.members[i].texture = 'NOTE_assets-alt';
+				}*/
+
 				// var noteStyle:String = isPixelStage ? 'pixel' : '';
 
 				/*if (section.noteStyle != '' || section.noteStyle != null)
@@ -4615,15 +4646,15 @@ class PlayState extends MusicBeatState
 
 			if (note.isSustainNote && ClientPrefs.newHealthSystem)
 				{
-					if (health >= 0.2)
+					if (health >= 0.023 * healthDrain)
 						{
-							health -= 0.0115 * healthDrain;
+							health -= 0.023 / 2 * healthDrain;
 						}
 					//trace('did the sustain drain health works?');
 				}
 				else
 				{
-					if (health >= 0.2)
+					if (health >= 0.023 * healthDrain)
 						{
 							health -= 0.023 * healthDrain;
 						}

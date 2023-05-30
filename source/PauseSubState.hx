@@ -227,9 +227,11 @@ class PauseSubState extends MusicBeatSubstate
 					practiceText.visible = PlayState.instance.practiceMode;
 				case "Restart Song":
 					restartSong();
+					PlayState.calculateTotalScore = false;
 				case "Leave Charting Mode":
 					restartSong();
 					PlayState.chartingMode = false;
+					PlayState.calculateTotalScore = false;
 				case 'Skip Time':
 					if(curTime < Conductor.songPosition)
 					{

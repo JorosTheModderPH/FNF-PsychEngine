@@ -157,6 +157,7 @@ class FreeplayState extends MusicBeatState
 		modeText = new FlxText(scoreText.x, scoreText.y + 68, 0, "", 24);
 		modeText.font = scoreText.font;
 		modeText.text = 'Press ALT';
+		modeText.color = 0xFFB2B2B2;
 		add(modeText);
 
 		add(scoreText);
@@ -401,12 +402,14 @@ class FreeplayState extends MusicBeatState
 
 			if (!sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop)))
 				{
-					// FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-					// return;
+					FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+					return;
 				} else {
 
 					switch(WeekData.getWeekFileName()) // i did this so the assets/data file will look so organized and it saves some time while looking around thorugh assets/data so you wont lose braincell 
 					{
+						case 'mod3':
+							PlayState.SONG = Song.loadFromJson('mod3' , poop, songLowercase);
 						case 'mod2':
 							PlayState.SONG = Song.loadFromJson('mod2' , poop, songLowercase);
 						case 'mod1':
@@ -496,10 +499,21 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty);
 		#end
-
 		PlayState.storyDifficulty = curDifficulty;
 		PlayState.storyMode = curMode;
 		diffText.text = '< ' + CoolUtil.difficultyString() + ' >';
+
+		switch(CoolUtil.difficultyString())
+		{
+			case 'EASY':
+				diffText.color = 0xFF00FF00;
+			case 'NORMAL':
+				diffText.color = 0xFFFFFF00;
+			case 'HARD':
+				diffText.color = 0xFFFF0000;
+			default:
+				diffText.color = 0xFFFFFFFF;
+		}
 		positionHighscore();
 	}
 
@@ -522,7 +536,6 @@ class FreeplayState extends MusicBeatState
 		PlayState.storyDifficulty = curDifficulty;
 		PlayState.storyMode = curMode;
 		modeText.text = '< ' + CoolUtil.modeString() + ' >';
-
 	}
 
 	function changeSelection(change:Int = 0, playSound:Bool = true)

@@ -37,9 +37,30 @@ class HealthIcon extends FlxSprite
 	private var iconOffsets:Array<Float> = [0, 0];
 	public function changeIcon(char:String) {
 		if(this.char != char) {
-			var name:String = 'icons/' + char;
-			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/icon-' + char; //Older versions of psych engine's support
-			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/icon-face'; //Prevents crash from missing icon
+			
+			var name:String = 'icons/default/' + char;
+            var folders:Array<String> = ['mod1', 'mod2'];
+            var prefix:Array<String> = ['', 'icon-'];
+
+                for (i in 0...folders.length) {
+                    for (j in 0...prefix.length) {
+
+                        var folder:String = folders[i];
+                        var file:String = prefix[j] + char;
+
+                    if (Paths.fileExists('images/icons/' + folder + '/' + file + '.png', IMAGE)) {
+                        name = 'icons/' + folder + '/' + file;
+                    break;
+                    }
+                }
+                    if (name != 'icons/default/' + char) {
+                     break;
+                }
+            }
+			
+			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/default/icon-' + char; //Older versions of psych engine's support
+			// if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/default/icon-face'; //Prevents crash from missing icon
+
 			var file:Dynamic = Paths.image(name);
 
 			loadGraphic(file); //Load stupidly first for getting the file size
