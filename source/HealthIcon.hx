@@ -39,11 +39,11 @@ class HealthIcon extends FlxSprite
 		if(this.char != char) {
 			
 			var name:String = 'icons/default/' + char;
-            var folders:Array<String> = ['mod1', 'mod2'];
+            var folders:Array<String> = ['mod1', 'mod2', 'mod3'];
             var prefix:Array<String> = ['', 'icon-'];
 
-                for (i in 0...folders.length) {
-                    for (j in 0...prefix.length) {
+            for (i in 0...folders.length) {
+                for (j in 0...prefix.length) {
 
                         var folder:String = folders[i];
                         var file:String = prefix[j] + char;
@@ -54,12 +54,12 @@ class HealthIcon extends FlxSprite
                     }
                 }
                     if (name != 'icons/default/' + char) {
-                     break;
+                    break;
                 }
             }
-			
+
 			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/default/icon-' + char; //Older versions of psych engine's support
-			// if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/default/icon-face'; //Prevents crash from missing icon
+			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/default/icon-face'; //Prevents crash from missing icon
 
 			var file:Dynamic = Paths.image(name);
 

@@ -1,7 +1,7 @@
 {
 	"songs": [
 		[
-			"     VS Whitty",
+			"     VS Tricky",
 			"none",
 			[
 				44,
@@ -10,8 +10,8 @@
 			]
 		],
 		[
-			"Lo Fight",
-			"whitty",
+			"Improbable Outset",
+			"tricky",
 			[
 				44,
 				44,
@@ -19,32 +19,14 @@
 			]
 		],
 		[
-			"Overhead",
-			"whitty",
+			"Madness",
+			"tricky-mad",
 			[
 				44,
 				44,
 				44
 			]
-		],
-		[
-			"Ballistic",
-			"whitty-mad",
-			[
-				255,
-				0,
-				0
-			]
-		],
-		[
-			"Ballistic Old",
-			"whitty-mad",
-			[
-				255,
-				0,
-				0
-			]
-		]
+	    ]	
 	],
 	"hiddenUntilUnlocked": false,
 	"hideFreeplay": false,

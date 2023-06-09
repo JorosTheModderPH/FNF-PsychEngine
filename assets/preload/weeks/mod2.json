@@ -17,6 +17,7 @@
 		["Eggnog B", "parents-b", [160, 209, 255]],
 		["Winter Horrorland B", "monster-b", [160, 209, 255]],
 		["Senpai B", "senpai-pixel-b", [255, 120, 191]],
+                ["Improbable Outset", "senpai-pixel-b", [255, 120, 191]],
 		["Roses B", "senpai-pixel-b", [255, 120, 191]],
 		["Thorns B", "spirit-pixel-b", [255, 120, 191]]
 	],

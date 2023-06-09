@@ -312,6 +312,8 @@ class PlayState extends MusicBeatState
 	public var opponentCameraOffset:Array<Float> = null;
 	public var girlfriendCameraOffset:Array<Float> = null;
 
+	var MAINLIGHT:FlxSprite;
+
 	#if desktop
 	// Discord RPC variables
 	var storyDifficultyText:String = "";
@@ -443,7 +445,7 @@ class PlayState extends MusicBeatState
 		persistentDraw = true;
 
 		if (SONG == null)
-			SONG = Song.loadFromJson('default' , 'tutorial', 'tutorial');
+			SONG = Song.loadFromJson(WeekData.getWeekFileName() , SONG.song, SONG.song);
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -761,13 +763,13 @@ class PlayState extends MusicBeatState
 
 		      	var wBg:FlxSprite;
 
-				wBg = new FlxSprite(-500, -300).loadGraphic(Paths.image('background/whitty/whittyBack'));
+				wBg = new FlxSprite(-500, -300).loadGraphic(Paths.image('backgrounds/whitty/whittyBack'));
 				add(wBg);
 
 			case 'ballisticAlley':
 
 			var nwBg:FlxSprite;
-			var waBg = Paths.getSparrowAtlas('background/whitty/BallisticBackground');
+			var waBg = Paths.getSparrowAtlas('backgrounds/whitty/BallisticBackground');
 
 			nwBg = new FlxSprite(-600, -200);
 			nwBg.frames = waBg;
@@ -776,6 +778,36 @@ class PlayState extends MusicBeatState
             nwBg.animation.play('gameButMove');
 
 			add(nwBg);
+
+		    case 'nevada':
+
+			var bg:FlxSprite = new FlxSprite(-350, -300).loadGraphic(Paths.image('backgrounds/clown/red'));
+
+			bg.antialiasing = true;
+			bg.scrollFactor.set(0.9, 0.9);
+
+			var stageFront:FlxSprite;
+			if (SONG.song.toLowerCase() != 'madness')
+			{
+				add(bg);
+				stageFront = new FlxSprite(-1100, -460).loadGraphic(Paths.image('backgrounds/clown/island_but_dumb'));
+			}
+			else
+				stageFront = new FlxSprite(-1100, -460).loadGraphic(Paths.image('backgrounds/clown/island_but_rocks_float','clown'));
+
+			stageFront.setGraphicSize(Std.int(stageFront.width * 1.4));
+			stageFront.antialiasing = true;
+			stageFront.scrollFactor.set(0.9, 0.9);
+			stageFront.active = false;
+			add(stageFront);
+			
+			MAINLIGHT = new FlxSprite(-470, -150).loadGraphic(Paths.image('hue','clown'));
+			MAINLIGHT.alpha - 0.3;
+			MAINLIGHT.setGraphicSize(Std.int(MAINLIGHT.width * 0.9));
+			MAINLIGHT.blend = "screen";
+			MAINLIGHT.updateHitbox();
+			MAINLIGHT.antialiasing = true;
+			MAINLIGHT.scrollFactor.set(1.2, 1.2);
 
 		}
 
@@ -804,6 +836,11 @@ class PlayState extends MusicBeatState
 				add(halloweenWhite);
 			case 'tank':
 				add(foregroundSprites);
+		}
+
+		if (curStage == 'nevada')
+		{	
+			add(MAINLIGHT);
 		}
 
 		#if LUA_ALLOWED
@@ -1019,9 +1056,9 @@ class PlayState extends MusicBeatState
 		darkenScreen.visible = true;
 
 		if (ClientPrefs.darkenScreen)
-			{
-				add(darkenScreen);
-			}
+		{
+			add(darkenScreen);
+		}
 
 		if (ClientPrefs.laneUnderlay)
 		{
